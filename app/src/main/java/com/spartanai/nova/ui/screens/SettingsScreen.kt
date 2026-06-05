@@ -45,8 +45,17 @@ fun SettingsScreen() {
         SettingsCategory("SecCom Cryptography") {
             SettingsTextField("Encryption Mode", settings.encryptionType) { orchestrator.updateSettings(settings.copy(encryptionType = it)) }
             SettingsTextField("Key Rotation (Days)", settings.keyRotationDays.toString()) { orchestrator.updateSettings(settings.copy(keyRotationDays = it.toIntOrNull() ?: 7)) }
+            SettingsTextField("Duress Kill PIN", settings.duressPin) { orchestrator.updateSettings(settings.copy(duressPin = it)) }
             SettingsToggle("Stealth Ghost Mode", settings.stealthModeActive) { orchestrator.updateSettings(settings.copy(stealthModeActive = it)) }
             SettingsToggle("Auto VPN Engagement", settings.autoVpnEngagement) { orchestrator.updateSettings(settings.copy(autoVpnEngagement = it)) }
+        }
+
+        // Geospatial Configuration
+        SettingsCategory("Geofence Guardian") {
+            SettingsToggle("Enable Geofence OMEGA", settings.geofenceEnabled) { orchestrator.updateSettings(settings.copy(geofenceEnabled = it)) }
+            SettingsTextField("Safe Zone Lat", settings.safeZoneLat.toString()) { orchestrator.updateSettings(settings.copy(safeZoneLat = it.toDoubleOrNull() ?: 0.0)) }
+            SettingsTextField("Safe Zone Lon", settings.safeZoneLon.toString()) { orchestrator.updateSettings(settings.copy(safeZoneLon = it.toDoubleOrNull() ?: 0.0)) }
+            SettingsSlider("Radius (m)", settings.safeZoneRadiusM, 100f..5000f) { orchestrator.updateSettings(settings.copy(safeZoneRadiusM = it)) }
         }
 
         // Wireless Configuration

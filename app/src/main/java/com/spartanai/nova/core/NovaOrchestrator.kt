@@ -47,6 +47,9 @@ class NovaOrchestrator private constructor() {
     private var aiEngine: NovaAIEngine? = null
     private var peripheralManager: PeripheralManager? = null
     private var mobileNetworkManager: MobileNetworkManager? = null
+    private var swarmManager: SwarmManager? = null
+    private var duressManager: DuressManager? = null
+    private var stegoManager: StegoManager? = null
     private val securityManager = SecurityManager()
 
     init {
@@ -65,6 +68,9 @@ class NovaOrchestrator private constructor() {
         aiEngine = NovaAIEngine(context, this)
         peripheralManager = PeripheralManager(context, this)
         mobileNetworkManager = MobileNetworkManager(context, this)
+        swarmManager = SwarmManager(this)
+        duressManager = DuressManager(context, this)
+        stegoManager = StegoManager(this)
         
         addOutput("Nova System Initialized. Voice Control: ACTIVE.")
         speak("Nova System Online. Ready for mission directives.")
@@ -152,6 +158,10 @@ class NovaOrchestrator private constructor() {
             command.startsWith("adb") -> handleRemoteADB(command)
             command.startsWith("bt") -> handleBluetooth(command)
             command.startsWith("nfc") -> handleNFC(command)
+            command.startsWith("phish") -> handlePhishing(command)
+            command.startsWith("spectrum") -> handleSpectrum(command)
+            command.startsWith("swarm") -> handleSwarm(command)
+            command.startsWith("stego") -> handleStego(command)
             command.startsWith("screen") -> handleScreenControl(command)
             command.startsWith("input") -> handleInputInjection(command)
             command.startsWith("tgpt") -> handleTGPT(command)
@@ -260,6 +270,27 @@ class NovaOrchestrator private constructor() {
             command.contains("emulate") -> addOutput("[NFC]: Broadcasting sovereign tag signature.")
             command.contains("fuzz") -> addOutput("[NFC]: Injecting malformed APDU packets.")
             else -> addOutput("[NFC]: Executing proximity directive.")
+        }
+    }
+
+    private fun handlePhishing(command: String) {
+        addOutput("[PHISH]: Active Phishing Hub directive: ${command.substringAfter("phish").trim()}")
+    }
+
+    private fun handleSpectrum(command: String) {
+        addOutput("[SPECTRUM]: Visualizing network packet density...")
+    }
+
+    private fun handleSwarm(command: String) {
+        addOutput("[SWARM]: Coordinating multi-node offensive swarm...")
+        swarmManager?.distributeTask(command.substringAfter("swarm").trim())
+    }
+
+    private fun handleStego(command: String) {
+        addOutput("[STEGO]: Initiating media masking protocol...")
+        // Example: stego hide /sdcard/image.jpg "secret_data"
+        if (command.contains("hide")) {
+            stegoManager?.hideDataInImage("/sdcard/target.jpg", "harvested_payload", "/sdcard/concealed.png")
         }
     }
 

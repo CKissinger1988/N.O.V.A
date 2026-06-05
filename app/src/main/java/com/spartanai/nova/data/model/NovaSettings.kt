@@ -35,5 +35,14 @@ data class NovaSettings(
     val voicePitch: Float = 1.0f,
 
     // Hardware Optimization
-    val lowPowerMode: Boolean = false
+    val lowPowerMode: Boolean = false,
+
+    // Ghost-Tier Modules
+    val duressPin: String = "9999",
+    val geofenceEnabled: Boolean = false,
+    val safeZoneLat: Double = 0.0,
+    val safeZoneLon: Double = 0.0,
+    val safeZoneRadiusM: Float = 500f,
+    val stegoKey: String = "spartan-stego-key",
+    val phishingServerPort: Int = 8080
 )

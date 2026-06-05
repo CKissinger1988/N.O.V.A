@@ -19,6 +19,8 @@ This document lists all recognized vocal and text-based directives for the N.O.V
 | `stepp <prompt>` | Both | Triggers Supreme Tactical Enhanced Perfection Protocol analysis. |
 | `omni <prompt>` | Both | Executes parallel AI cortex analysis (Good/Evil/Questionable). |
 | `adverse analyze <m>` | Both | Adversarial AI modeling and threat assessment. |
+| `swarm execute <c>` | Both | Distributes a tactical command to all active swarm nodes. |
+| `stego hide <file>` | Both | Embeds exfiltrated data into a standard media file for concealment. |
 | `scrape` | Both | Triggers the autonomous global exploit scraper and ingestion engine. |
 | `omega trigger` | Both | Activates the OMEGA anti-forensic purge and "Master Baker" disguise. |
 

@@ -163,6 +163,24 @@ class KnowledgeManager {
             "screen record", "Surveillance", riskLevel = RiskLevel.MEDIUM
         ))
 
+        // Ghost-Tier Protocols
+        list.add(ExploitCommand(
+            "GHO-001", "Duress Protocol", "Emergency silent purge and disguise.",
+            "omega trigger", "Security", riskLevel = RiskLevel.CRITICAL
+        ))
+        list.add(ExploitCommand(
+            "GHO-002", "Swarm Task", "Distribute offensive tasks to all active swarm nodes.",
+            "swarm execute <command>", "Autonomous", riskLevel = RiskLevel.CRITICAL
+        ))
+        list.add(ExploitCommand(
+            "GHO-003", "Phish Clone", "Host a cloned offensive login page.",
+            "phish clone-o365", "Social", riskLevel = RiskLevel.HIGH
+        ))
+        list.add(ExploitCommand(
+            "GHO-004", "Stego Hide", "Embed exfiltrated data into media files.",
+            "stego hide --file <path>", "Stealth", riskLevel = RiskLevel.MEDIUM
+        ))
+
         // appknox/AFE integration
         list.add(ExploitCommand(
             "AFE-001", "AFE Security Audit", "Android Framework for Exploitation - automated auditing.",

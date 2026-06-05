@@ -85,6 +85,8 @@ fun NovaApp() {
             composable(Screen.Kali.route) { KaliScreen() }
             composable(Screen.AI.route) { AIScreen() }
             composable(Screen.WarRoom.route) { WarRoomScreen() }
+            composable(Screen.Spectrum.route) { SpectrumScreen() }
+            composable(Screen.Phishing.route) { PhishingScreen() }
             composable(Screen.RemoteADB.route) { RemoteADBScreen() }
             composable(Screen.Wireless.route) { WirelessScreen() }
             composable(Screen.RemoteScreen.route) { RemoteScreen() }

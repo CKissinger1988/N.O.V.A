@@ -57,6 +57,8 @@ The N.O.V.A. intelligence layer provides hands-free tactical advisory and autono
 
 ### **Tactical Interface**
 *   **War Room**: Real-time visual network topology map showing breached nodes, secure vectors, and lateral paths.
+*   **Packet Spectrum**: Visual sniffer with AI-driven deep-packet intelligence and high-value traffic tagging.
+*   **Active Phishing Hub**: Sovereign hosting of cloned login pages with real-time token and credential capture.
 *   **Vocal Interface**: Voice-activated command recognition triggered by "NOVA" and real-time AI vocal status updates.
 *   **SOC Header**: Persistent telemetry monitoring of CPU/RAM usage, local threat levels, and C2 link integrity.
 
@@ -67,6 +69,9 @@ N.O.V.A. implements security standards that exceed CNSA and NSA requirements:
 
 *   **Cascaded Cryptography**: All data and telemetry are encrypted using a dual-layer pipeline: **AES-256-GCM** followed by **ChaCha20-Poly1305**.
 *   **Biometric Sovereign Gate**: Mandatory Fingerprint/Face/PIN authentication for application entry.
+*   **Duress Security**: A secondary "Duress PIN" that silently purges the vault and dispatches an encrypted S.O.S. beacon.
+*   **Geofence Guardian**: Automated OMEGA activation based on geospatial high-risk perimeter analysis.
+*   **Stealth Steganography**: Embedding offensive telemetry into harmless media files for forensic evasion.
 *   **Omega Protocol**: An anti-forensic emergency trigger that performs a secure wipe of the SecCom vault and swaps the app to a "Master Baker" disguise mode (Cupcake icon and baking UI).
 
 ---
