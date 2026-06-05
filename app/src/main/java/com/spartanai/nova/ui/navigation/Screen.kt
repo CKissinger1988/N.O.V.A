@@ -8,7 +8,6 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Terminal : Screen("terminal", "Terminal", Icons.Default.Terminal)
     object Kali : Screen("kali", "NetHunter", Icons.Default.Security)
     object AI : Screen("ai", "AI Hub", Icons.Default.Psychology)
-    object Tools : Screen("tools", "Tools", Icons.Default.Build)
     object RemoteADB : Screen("remote_adb", "RemoteADB", Icons.Default.PhoneAndroid)
     object WarRoom : Screen("war_room", "War Room", Icons.Default.Map)
     object Wireless : Screen("wireless", "Wireless", Icons.Default.SettingsBluetooth)
@@ -20,6 +19,6 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Settings : Screen("settings", "Settings", Icons.Default.Settings)
 
     companion object {
-        val items = listOf(Terminal, Kali, AI, WarRoom, RemoteADB, Wireless, RemoteScreen, Comms, Wallet, Tools)
+        val items = listOf(Terminal, Kali, AI, WarRoom, RemoteADB, Wireless, RemoteScreen, Comms, Wallet, Tools, Knowledge)
     }
 }

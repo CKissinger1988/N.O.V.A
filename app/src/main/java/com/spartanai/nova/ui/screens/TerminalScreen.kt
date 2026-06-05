@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -16,16 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spartanai.nova.core.NovaOrchestrator
 
-import androidx.compose.ui.tooling.preview.Preview
-import com.spartanai.nova.ui.theme.NOVATheme
-
-@Preview(showBackground = true)
 @Composable
-fun TerminalPreview() {
-    NOVATheme {
-        TerminalScreen()
-    }
-}
+fun TerminalScreen() {
     val orchestrator = NovaOrchestrator.getInstance()
     val terminalOutput by orchestrator.terminalOutput.collectAsState()
     var currentCommand by remember { mutableStateOf("") }
@@ -45,7 +39,7 @@ fun TerminalPreview() {
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Icon(
-                imageVector = androidx.compose.material.icons.Icons.Default.VpnLock,
+                imageVector = Icons.Default.VpnLock,
                 contentDescription = "SecCom Active",
                 tint = Color.Green,
                 modifier = Modifier.size(16.dp)
@@ -83,8 +77,8 @@ fun TerminalPreview() {
                 fontFamily = FontFamily.Monospace
             ),
             placeholder = { Text("Enter command...", color = Color.Gray) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Run),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Green,
                 unfocusedBorderColor = Color.DarkGray,
                 cursorColor = Color.Green
@@ -98,7 +92,7 @@ fun TerminalPreview() {
                     }
                 }) {
                     Icon(
-                        imageVector = androidx.compose.material.icons.Icons.Default.Send,
+                        imageVector = Icons.Default.Send,
                         contentDescription = "Run",
                         tint = Color.Green
                     )

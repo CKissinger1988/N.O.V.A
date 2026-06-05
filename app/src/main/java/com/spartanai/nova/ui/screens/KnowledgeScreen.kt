@@ -3,10 +3,13 @@ package com.spartanai.nova.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.spartanai.nova.core.NovaOrchestrator
@@ -22,7 +25,7 @@ fun KnowledgeScreen() {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Exploit Knowledge Base", style = MaterialTheme.typography.headlineMedium)
             IconButton(onClick = { orchestrator.executeCommand("scrape") }) {

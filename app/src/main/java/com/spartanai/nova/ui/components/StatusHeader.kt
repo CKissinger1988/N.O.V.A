@@ -1,6 +1,5 @@
 package com.spartanai.nova.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -18,16 +17,8 @@ import com.spartanai.nova.ui.theme.NovaGreen
 import com.spartanai.nova.ui.theme.NovaBlue
 import com.spartanai.nova.ui.theme.NovaRed
 
-import androidx.compose.ui.tooling.preview.Preview
-import com.spartanai.nova.ui.theme.NOVATheme
-
-@Preview(showBackground = true)
 @Composable
-fun StatusHeaderPreview() {
-    NOVATheme {
-        StatusHeader()
-    }
-}
+fun StatusHeader() {
     val orchestrator = NovaOrchestrator.getInstance()
     val systemStatus by orchestrator.systemStatus.collectAsState()
 
@@ -48,7 +39,7 @@ fun StatusHeaderPreview() {
                 StatusIndicator(label = "THREAT", value = systemStatus.threatLevel, icon = Icons.Default.Warning, color = if (systemStatus.threatLevel == "LOW") NovaGreen else NovaRed)
             }
 
-            Divider(modifier = Modifier.padding(vertical = 4.dp), color = Color.DarkGray, thickness = 0.5.dp)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = Color.DarkGray, thickness = 0.5.dp)
 
             // Bottom Row: Network & Security
             Row(

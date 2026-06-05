@@ -2,6 +2,7 @@ package com.spartanai.nova.core
 
 import com.spartanai.nova.data.model.ExploitCommand
 import com.spartanai.nova.data.model.NovaSettings
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -45,6 +46,7 @@ class NovaOrchestrator private constructor() {
     private var exploitScraper: ExploitScraper? = null
     private var aiEngine: NovaAIEngine? = null
     private var peripheralManager: PeripheralManager? = null
+    private var mobileNetworkManager: MobileNetworkManager? = null
     private val securityManager = SecurityManager()
 
     init {
@@ -62,24 +64,40 @@ class NovaOrchestrator private constructor() {
         exploitScraper = ExploitScraper(this)
         aiEngine = NovaAIEngine(context, this)
         peripheralManager = PeripheralManager(context, this)
+        mobileNetworkManager = MobileNetworkManager(context, this)
+        
         addOutput("Nova System Initialized. Voice Control: ACTIVE.")
         speak("Nova System Online. Ready for mission directives.")
         startStatusSimulation()
+        startAutoScanners()
     }
 
     private fun startStatusSimulation() {
-        kotlinx.coroutines.GlobalScope.launch {
+        GlobalScope.launch {
             while (true) {
                 // Optimization: Throttle updates to 5 seconds for lower hardware stress
                 _systemStatus.value = _systemStatus.value.copy(
-                    cpuUsage = (10..35).random(), // Slightly lower simulation range
+                    cpuUsage = (10..35).random(),
                     ramUsage = (20..50).random(),
                     c2LinkStatus = if (_isKaliActive.value) "CONNECTED (ENCRYPTED)" else "DISCONNECTED",
                     vpnActive = true,
                     proxyActive = _isKaliActive.value,
                     threatLevel = if (_systemStatus.value.cpuUsage > 40) "MEDIUM" else "LOW"
                 )
-                kotlinx.coroutines.delay(5000)
+                delay(5000)
+            }
+        }
+    }
+
+    private fun startAutoScanners() {
+        GlobalScope.launch {
+            while (true) {
+                if (_settings.value.nfcAutoClone) {
+                    executeCommand("nfc read")
+                }
+                // Mobile network scan
+                mobileNetworkManager?.scanMobileNetworks()
+                delay(30000) // 30 second interval for background scanning
             }
         }
     }
@@ -331,12 +349,6 @@ class NovaOrchestrator private constructor() {
 
     private fun handleAndroidExploits(command: String) {
         addOutput("Android-Exploits: Loading sundaysec exploit database...")
-    }
-
-    private fun addOutput(line: String) {
-        val current = _terminalOutput.value.toMutableList()
-        current.add(line)
-        _terminalOutput.value = current
     }
 
     private fun toggleKali() {

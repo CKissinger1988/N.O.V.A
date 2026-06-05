@@ -1,6 +1,6 @@
 package com.spartanai.nova.core
 
-import android.util.Base64
+import java.util.Base64
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
@@ -27,7 +27,7 @@ class SecurityManager {
         
         // Step 2: ChaCha20-Poly1305 (Simulated or via Tink/BouncyCastle)
         // For the purpose of this integration, we wrap it in a secondary secure layer
-        return Base64.encodeToString(aesCiphertext.toByteArray(), Base64.DEFAULT)
+        return Base64.getEncoder().encodeToString(aesCiphertext)
     }
 
     private fun encryptAES(data: String, key: ByteArray): ByteArray {
@@ -45,7 +45,7 @@ class SecurityManager {
     }
 
     fun decryptCascaded(encodedData: String, key: ByteArray): String {
-        val decoded = Base64.decode(encodedData, Base64.DEFAULT)
+        val decoded = Base64.getDecoder().decode(encodedData)
         // Reverse cascaded process
         return decryptAES(decoded, key)
     }
@@ -65,8 +65,9 @@ class SecurityManager {
     }
 
     /**
-     * OMEGA PROTOCOL: Anti-Forensic Secure Wipe
-     * Overwrites sensitive memory buffers and clears the SecCom vault.
+     * OMEGA PROTOCOL: Anti-Forensic Secure Wipe & Icon Swap
+     * Overwrites sensitive memory buffers, clears the SecCom vault,
+     * and swaps the app icon to the "Master Baker" disguise.
      */
     fun triggerOmegaProtocol(context: android.content.Context) {
         // 1. Clear SharedPreferences / Settings
@@ -77,7 +78,23 @@ class SecurityManager {
         // 3. Clear Terminal History in Orchestrator
         NovaOrchestrator.getInstance().addOutput("[CRITICAL]: OMEGA PROTOCOL ACTIVATED. PURGING SYSTEM...")
         
-        // 4. Disguise Trigger: Next launch will enter "Baking Mode"
+        // 4. Disguise Trigger: Icon and Activity Swap
+        val pm = context.packageManager
+        
+        // Enable Baking Alias
+        pm.setComponentEnabledSetting(
+            android.content.ComponentName(context, "com.spartanai.nova.BakingActivityAlias"),
+            android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            android.content.pm.PackageManager.DONT_KILL_APP
+        )
+
+        // Disable Main Activity
+        pm.setComponentEnabledSetting(
+            android.content.ComponentName(context, "com.spartanai.nova.MainActivity"),
+            android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            android.content.pm.PackageManager.DONT_KILL_APP
+        )
+
         prefs.edit().putBoolean("disguise_mode_active", true).apply()
     }
 
