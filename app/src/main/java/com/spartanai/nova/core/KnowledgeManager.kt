@@ -87,8 +87,8 @@ class KnowledgeManager {
             "rocket-connect", "Comms", riskLevel = RiskLevel.LOW
         ))
         list.add(ExploitCommand(
-            "AI-TGPT", "tgpt AI Chat", "Terminal-based AI chatbot for tactical advice.",
-            "tgpt <query>", "AI Hub", riskLevel = RiskLevel.LOW
+            "AI-NOVA", "NOVA AI Hub", "Gemini/Claude strategic advisory.",
+            "nova <prompt>", "AI Hub", riskLevel = RiskLevel.LOW
         ))
 
         // Xposure & darkdump
@@ -109,8 +109,8 @@ class KnowledgeManager {
 
         // SnailSploit Frameworks
         list.add(ExploitCommand(
-            "AAT-001", "AATMF Modeling", "Adversarial AI Threat Modeling Framework.",
-            "aatmf analyze --model <model_id>", "Adversarial AI", riskLevel = RiskLevel.HIGH
+            "AAT-001", "Adverse Analyze", "Adversarial AI modeling and threat assessment.",
+            "adverse analyze --model <model_id>", "Adversarial AI", riskLevel = RiskLevel.HIGH
         ))
         list.add(ExploitCommand(
             "KUB-001", "KubeRoast Scan", "Kubernetes misconfiguration attack-path scanner.",

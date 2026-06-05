@@ -10,11 +10,13 @@ This document lists all recognized vocal and text-based directives for the N.O.V
 | Command | Mode | Description |
 | :--- | :--- | :--- |
 | `NOVA` | Voice | Activates the Speech-to-Text listener for immediate directives. |
+| `NOVA <prompt>` | Both | Gemini/Claude strategic advisory. |
 | `listen` | Text/Voice | Alias for NOVA activation. |
 | `full send on <target>` | Both | Initiates recursive SC-GOD protocol until target breach & reverse shell. |
 | `god --directive <d>` | Both | Engages absolute mission fulfillment loop (Apex God Shard). |
 | `stepp <prompt>` | Both | Triggers Supreme Tactical Enhanced Perfection Protocol analysis. |
 | `omni <prompt>` | Both | Executes parallel AI cortex analysis (Good/Evil/Questionable). |
+| `adverse analyze <m>` | Both | Adversarial AI modeling and threat assessment. |
 | `scrape` | Both | Triggers the autonomous global exploit scraper and ingestion engine. |
 | `omega trigger` | Both | Activates the OMEGA anti-forensic purge and "Master Baker" disguise. |
 
@@ -23,9 +25,9 @@ This document lists all recognized vocal and text-based directives for the N.O.V
 ## 🤖 AI & Intelligence Hub
 | Command | System | Description |
 | :--- | :--- | :--- |
-| `ai <request>` | Gemini-CLI | Submit a tactical prompt for Gemini-powered offensive reasoning. |
+| `NOVA <prompt>` | AI Hub | Gemini/Claude strategic advisory. |
 | `tgpt <query>` | Tactical GPT | Terminal-based AI chat for immediate situational advice. |
-| `aatmf analyze <m>` | AATMF | Model adversarial AI attack vectors against target models. |
+| `adverse analyze <m>` | Adversarial AI | Model adversarial AI attack vectors against target models. |
 
 ---
 

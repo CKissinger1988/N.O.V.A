@@ -129,7 +129,8 @@ class NovaOrchestrator private constructor() {
             command.startsWith("war-room") -> addOutput("[WAR-ROOM]: Topology re-scan initiated.")
             command.startsWith("peripheral") -> peripheralManager?.detectPeripherals()
             command.startsWith("kali") -> toggleKali()
-            command.startsWith("ai") -> processAIRequest(command)
+            command.startsWith("nova ") -> processAIRequest(command)
+            command.startsWith("adverse analyze") -> handleAATMF(command)
             command.startsWith("ghost") -> handleGhost(command)
             command.startsWith("afe") -> handleAFE(command)
             command.startsWith("android-exploits") -> handleAndroidExploits(command)
@@ -156,7 +157,6 @@ class NovaOrchestrator private constructor() {
             command.startsWith("tgpt") -> handleTGPT(command)
             command.startsWith("rocket") -> handleRocketChat(command)
             command.startsWith("darkdump") -> handleDarkDump(command)
-            command.startsWith("aatmf") -> handleAATMF(command)
             command.startsWith("kuberoast") -> handleKubeRoast(command)
             command.startsWith("harvest") -> {
                 val target = if (command.contains("from")) command.substringAfter("from").trim() else "LOCAL"
@@ -168,7 +168,7 @@ class NovaOrchestrator private constructor() {
             }
             command.startsWith("usb-exploit") -> usbExploitManager?.triggerUSBExploit()
             command.startsWith("scrape") -> exploitScraper?.startAutonomousScrape()
-            command.startsWith("listen") || command.startsWith("nova") -> startListening()
+            command.startsWith("listen") || command == "nova" -> startListening()
             else -> {
                 addOutput("Executing: $command ...")
                 speak("Executing command: $command")
@@ -357,7 +357,11 @@ class NovaOrchestrator private constructor() {
     }
 
     private fun processAIRequest(request: String) {
-        val prompt = request.removePrefix("ai").trim()
+        val prompt = if (request.startsWith("nova ")) {
+            request.removePrefix("nova ").trim()
+        } else {
+            request.removePrefix("ai").trim()
+        }
         addOutput("[GEMINI-CLI]: Analyzing payload for vulnerability patterns...")
         // In production, this would use a ProcessBuilder to call the gemini-cli binary
         // or an internal AI service bridge.
