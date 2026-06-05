@@ -32,5 +32,8 @@ data class NovaSettings(
     
     // Voice Settings
     val voiceSpeed: Float = 1.0f,
-    val voicePitch: Float = 1.0f
+    val voicePitch: Float = 1.0f,
+
+    // Hardware Optimization
+    val lowPowerMode: Boolean = false
 )

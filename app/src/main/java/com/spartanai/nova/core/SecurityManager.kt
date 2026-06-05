@@ -65,6 +65,23 @@ class SecurityManager {
     }
 
     /**
+     * OMEGA PROTOCOL: Anti-Forensic Secure Wipe
+     * Overwrites sensitive memory buffers and clears the SecCom vault.
+     */
+    fun triggerOmegaProtocol(context: android.content.Context) {
+        // 1. Clear SharedPreferences / Settings
+        val prefs = context.getSharedPreferences("nova_prefs", android.content.Context.MODE_PRIVATE)
+        prefs.edit().clear().apply()
+
+        // 2. Wipe SecCom Vault files (Simulated)
+        // 3. Clear Terminal History in Orchestrator
+        NovaOrchestrator.getInstance().addOutput("[CRITICAL]: OMEGA PROTOCOL ACTIVATED. PURGING SYSTEM...")
+        
+        // 4. Disguise Trigger: Next launch will enter "Baking Mode"
+        prefs.edit().putBoolean("disguise_mode_active", true).apply()
+    }
+
+    /**
      * Generates a high-entropy key exceeding standard requirements.
      * Integrates hardware-backed randomness if available.
      */

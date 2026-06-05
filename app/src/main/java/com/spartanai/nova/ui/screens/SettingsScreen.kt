@@ -67,6 +67,11 @@ fun SettingsScreen() {
             SettingsSlider("Voice Pitch", settings.voicePitch, 0.5f..2.0f) { orchestrator.updateSettings(settings.copy(voicePitch = it)) }
         }
 
+        // Optimization Configuration
+        SettingsCategory("Hardware & Performance") {
+            SettingsToggle("Low Power Mode (Moto XT2617V Opt)", settings.lowPowerMode) { orchestrator.updateSettings(settings.copy(lowPowerMode = it)) }
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
         
         Button(

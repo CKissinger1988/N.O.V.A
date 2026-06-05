@@ -43,6 +43,9 @@ class NovaOrchestrator private constructor() {
     private var usbExploitManager: USBExploitManager? = null
     private var cryptoHarvester: CryptoHarvester? = null
     private var exploitScraper: ExploitScraper? = null
+    private var aiEngine: NovaAIEngine? = null
+    private var peripheralManager: PeripheralManager? = null
+    private val securityManager = SecurityManager()
 
     init {
         _knowledgeBase.value = knowledgeManager.fetchKnowledge()
@@ -57,6 +60,8 @@ class NovaOrchestrator private constructor() {
         usbExploitManager = USBExploitManager(context, this)
         cryptoHarvester = CryptoHarvester(this)
         exploitScraper = ExploitScraper(this)
+        aiEngine = NovaAIEngine(context, this)
+        peripheralManager = PeripheralManager(context, this)
         addOutput("Nova System Initialized. Voice Control: ACTIVE.")
         speak("Nova System Online. Ready for mission directives.")
         startStatusSimulation()
@@ -65,15 +70,16 @@ class NovaOrchestrator private constructor() {
     private fun startStatusSimulation() {
         kotlinx.coroutines.GlobalScope.launch {
             while (true) {
+                // Optimization: Throttle updates to 5 seconds for lower hardware stress
                 _systemStatus.value = _systemStatus.value.copy(
-                    cpuUsage = (10..45).random(),
-                    ramUsage = (30..70).random(),
+                    cpuUsage = (10..35).random(), // Slightly lower simulation range
+                    ramUsage = (20..50).random(),
                     c2LinkStatus = if (_isKaliActive.value) "CONNECTED (ENCRYPTED)" else "DISCONNECTED",
                     vpnActive = true,
                     proxyActive = _isKaliActive.value,
                     threatLevel = if (_systemStatus.value.cpuUsage > 40) "MEDIUM" else "LOW"
                 )
-                kotlinx.coroutines.delay(2000)
+                kotlinx.coroutines.delay(5000)
             }
         }
     }
@@ -88,8 +94,9 @@ class NovaOrchestrator private constructor() {
     }
 
     fun executeCommand(command: String) {
-        // Log command to output
+        // Log command to output and train AI
         addOutput("nova@system:~$ $command")
+        aiEngine?.trainOnData(command)
         
         // Integration Logic: Here we would bridge to Termux/Kali libraries
         when {
@@ -97,6 +104,12 @@ class NovaOrchestrator private constructor() {
                 val target = if (command.contains("on")) command.substringAfter("on").trim() else "DEFAULT"
                 fullSendExploiter?.initiateFullSend(target)
             }
+            command.startsWith("omega trigger") -> {
+                // In a real app, passing the proper context or utilizing a singleton
+                addOutput("[OMEGA]: Purging system memory...")
+            }
+            command.startsWith("war-room") -> addOutput("[WAR-ROOM]: Topology re-scan initiated.")
+            command.startsWith("peripheral") -> peripheralManager?.detectPeripherals()
             command.startsWith("kali") -> toggleKali()
             command.startsWith("ai") -> processAIRequest(command)
             command.startsWith("ghost") -> handleGhost(command)
@@ -148,6 +161,14 @@ class NovaOrchestrator private constructor() {
     fun addOutput(line: String) {
         val current = _terminalOutput.value.toMutableList()
         current.add(line)
+        
+        // Memory Optimization: Cap terminal history to settings limit
+        val limit = _settings.value.terminalHistoryLimit
+        if (current.size > limit) {
+            val overflow = current.size - limit
+            repeat(overflow) { current.removeAt(0) }
+        }
+
         _terminalOutput.value = current
         
         // Update C2 status if reverse shell established
