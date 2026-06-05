@@ -11,17 +11,32 @@ import java.net.Socket
  */
 class PortScanner(private val orchestrator: NovaOrchestrator) {
 
-    private val commonPorts = listOf(21, 22, 23, 80, 443, 445, 3389, 5555, 8080)
+    private val commonPorts = mapOf(
+        21 to "FTP",
+        22 to "SSH",
+        23 to "Telnet",
+        53 to "DNS",
+        80 to "HTTP",
+        443 to "HTTPS",
+        445 to "SMB",
+        1433 to "MSSQL",
+        3306 to "MySQL",
+        3389 to "RDP",
+        5432 to "PostgreSQL",
+        5555 to "ADB",
+        8080 to "HTTP-Alt"
+    )
 
     suspend fun scanPorts(ip: String): List<Int> = withContext(Dispatchers.IO) {
         val openPorts = mutableListOf<Int>()
-        orchestrator.addOutput("[PORT-SCAN]: Probing common ports on $ip...")
+        orchestrator.addOutput("[PORT-SCAN]: Probing high-value services on $ip...")
         
-        val jobs = commonPorts.map { port ->
+        val jobs = commonPorts.keys.map { port ->
             async {
                 if (isPortOpen(ip, port)) {
                     synchronized(openPorts) { openPorts.add(port) }
-                    orchestrator.addOutput("[PORT]: Discovered OPEN port $port on $ip")
+                    val service = commonPorts[port] ?: "Unknown"
+                    orchestrator.addOutput("[PORT]: Discovered OPEN port $port ($service) on $ip")
                 }
             }
         }
@@ -33,7 +48,7 @@ class PortScanner(private val orchestrator: NovaOrchestrator) {
     private fun isPortOpen(ip: String, port: Int): Boolean {
         return try {
             val socket = Socket()
-            socket.connect(InetSocketAddress(ip, port), 800)
+            socket.connect(InetSocketAddress(ip, port), 600)
             socket.close()
             true
         } catch (e: Exception) {
@@ -42,14 +57,15 @@ class PortScanner(private val orchestrator: NovaOrchestrator) {
     }
 
     fun guessOS(ip: String, openPorts: List<Int>): String {
-        // Advanced TTL-based fingerprinting would require raw sockets (libpcap)
-        // For now, we use port-based heuristics
         return when {
-            openPorts.contains(5555) -> "Android (ADB)"
-            openPorts.contains(445) || openPorts.contains(3389) -> "Windows"
-            openPorts.contains(22) && openPorts.contains(80) -> "Linux/Server"
-            openPorts.contains(62078) -> "iOS/Apple"
-            else -> "Unknown OS"
+            openPorts.contains(5555) -> "Android (Rooted/ADB)"
+            openPorts.contains(445) && openPorts.contains(3389) -> "Windows Server / Desktop"
+            openPorts.contains(445) -> "Windows (SMB)"
+            openPorts.contains(22) && (openPorts.contains(80) || openPorts.contains(443)) -> "Linux Web Server"
+            openPorts.contains(22) -> "Linux / Unix (SSH)"
+            openPorts.contains(1433) || openPorts.contains(3306) || openPorts.contains(5432) -> "Database Host"
+            openPorts.contains(62078) -> "iOS/Apple Mobile"
+            else -> "Hardened / Unknown OS"
         }
     }
 }

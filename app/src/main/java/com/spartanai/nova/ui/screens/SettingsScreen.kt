@@ -8,8 +8,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.spartanai.nova.core.NovaOrchestrator
 import com.spartanai.nova.data.model.NovaSettings
+import com.spartanai.nova.ui.theme.*
 
 @Composable
 fun SettingsScreen() {
@@ -23,82 +25,156 @@ fun SettingsScreen() {
             .padding(16.dp)
             .verticalScroll(scrollState)
     ) {
-        Text("Mission Configuration", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(16.dp))
+        Text("SOVEREIGN CONFIGURATION", style = MaterialTheme.typography.headlineMedium, color = HoloCyan)
+        Text("Master control for all N.O.V.A sub-systems", style = MaterialTheme.typography.bodySmall, color = androidx.compose.ui.graphics.Color.Gray)
+        
+        Spacer(modifier = Modifier.height(24.dp))
 
-        // AI Configuration
-        SettingsCategory("AI Command Center") {
-            SettingsTextField("AI Provider", settings.aiProvider) { orchestrator.updateSettings(settings.copy(aiProvider = it)) }
-            SettingsTextField("AI Model", settings.aiModel) { orchestrator.updateSettings(settings.copy(aiModel = it)) }
-            SettingsSlider("Temperature", settings.aiTemperature, 0f..1f) { orchestrator.updateSettings(settings.copy(aiTemperature = it)) }
-            SettingsToggle("Auto-Execute AI Payloads", settings.aiAutoExecute) { orchestrator.updateSettings(settings.copy(aiAutoExecute = it)) }
+        // UI & Aesthetic Section
+        SettingsSection("HOLOGRAPHIC INTERFACE") {
+            SettingsSlider(
+                label = "Glow Intensity",
+                value = settings.uiHolographicGlowIntensity,
+                onValueChange = { orchestrator.updateSettings(settings.copy(uiHolographicGlowIntensity = it)) }
+            )
+            SettingsSlider(
+                label = "Tactical View Scaling",
+                value = settings.uiDisplayScale,
+                range = 0.5f..2.0f,
+                onValueChange = { orchestrator.updateSettings(settings.copy(uiDisplayScale = it)) }
+            )
+            SettingsSwitch(
+                label = "High-Res Rendering (4K Mode)",
+                checked = settings.uiHighResRendering,
+                onCheckedChange = { orchestrator.updateSettings(settings.copy(uiHighResRendering = it)) }
+            )
+            SettingsSlider(
+                label = "Animation Speed (ms)",
+                value = settings.uiAnimationSpeedMs.toFloat(),
+                range = 100f..1000f,
+                onValueChange = { orchestrator.updateSettings(settings.copy(uiAnimationSpeedMs = it.toInt())) }
+            )
         }
 
-        // Terminal Configuration
-        SettingsCategory("Terminal Interface") {
-            SettingsSlider("Font Size", settings.terminalFontSize.toFloat(), 8f..24f) { orchestrator.updateSettings(settings.copy(terminalFontSize = it.toInt())) }
-            SettingsTextField("History Limit", settings.terminalHistoryLimit.toString()) { orchestrator.updateSettings(settings.copy(terminalHistoryLimit = it.toIntOrNull() ?: 1000)) }
-            SettingsToggle("Auto-Scroll to Bottom", settings.terminalAutoScroll) { orchestrator.updateSettings(settings.copy(terminalAutoScroll = it)) }
+
+        // AI & Intelligence Section
+        SettingsSection("AI TACTICAL ENGINE") {
+            SettingsTextField(
+                label = "AI Provider",
+                value = settings.aiProvider,
+                onValueChange = { orchestrator.updateSettings(settings.copy(aiProvider = it)) }
+            )
+            SettingsTextField(
+                label = "Strategic Model",
+                value = settings.aiModel,
+                onValueChange = { orchestrator.updateSettings(settings.copy(aiModel = it)) }
+            )
+            SettingsSlider(
+                label = "Temperature (Cortex Chaos)",
+                value = settings.aiTemperature,
+                onValueChange = { orchestrator.updateSettings(settings.copy(aiTemperature = it)) }
+            )
+            SettingsSwitch(
+                label = "Autonomous Execution",
+                checked = settings.aiAutoExecute,
+                onCheckedChange = { orchestrator.updateSettings(settings.copy(aiAutoExecute = it)) }
+            )
         }
 
-        // Security Configuration
-        SettingsCategory("SecCom Cryptography") {
-            SettingsTextField("Encryption Mode", settings.encryptionType) { orchestrator.updateSettings(settings.copy(encryptionType = it)) }
-            SettingsTextField("Key Rotation (Days)", settings.keyRotationDays.toString()) { orchestrator.updateSettings(settings.copy(keyRotationDays = it.toIntOrNull() ?: 7)) }
-            SettingsTextField("Duress Kill PIN", settings.duressPin) { orchestrator.updateSettings(settings.copy(duressPin = it)) }
-            SettingsToggle("Stealth Ghost Mode", settings.stealthModeActive) { orchestrator.updateSettings(settings.copy(stealthModeActive = it)) }
-            SettingsToggle("Auto VPN Engagement", settings.autoVpnEngagement) { orchestrator.updateSettings(settings.copy(autoVpnEngagement = it)) }
+        // Network & Recon Section
+        SettingsSection("RECONNAISSANCE PARAMETERS") {
+            SettingsSlider(
+                label = "Network Scan Timeout (ms)",
+                value = settings.netScanTimeoutMs.toFloat(),
+                range = 500f..5000f,
+                onValueChange = { orchestrator.updateSettings(settings.copy(netScanTimeoutMs = it.toInt())) }
+            )
+            SettingsSlider(
+                label = "Scanner Threads",
+                value = settings.netScanThreads.toFloat(),
+                range = 10f..200f,
+                onValueChange = { orchestrator.updateSettings(settings.copy(netScanThreads = it.toInt())) }
+            )
+            SettingsSwitch(
+                label = "Stealth Mode (Anti-Forensics)",
+                checked = settings.stealthModeActive,
+                onCheckedChange = { orchestrator.updateSettings(settings.copy(stealthModeActive = it)) }
+            )
         }
 
-        // Geospatial Configuration
-        SettingsCategory("Geofence Guardian") {
-            SettingsToggle("Enable Geofence OMEGA", settings.geofenceEnabled) { orchestrator.updateSettings(settings.copy(geofenceEnabled = it)) }
-            SettingsTextField("Safe Zone Lat", settings.safeZoneLat.toString()) { orchestrator.updateSettings(settings.copy(safeZoneLat = it.toDoubleOrNull() ?: 0.0)) }
-            SettingsTextField("Safe Zone Lon", settings.safeZoneLon.toString()) { orchestrator.updateSettings(settings.copy(safeZoneLon = it.toDoubleOrNull() ?: 0.0)) }
-            SettingsSlider("Radius (m)", settings.safeZoneRadiusM, 100f..5000f) { orchestrator.updateSettings(settings.copy(safeZoneRadiusM = it)) }
-        }
-
-        // Wireless Configuration
-        SettingsCategory("Wireless Subsystems") {
-            SettingsTextField("BT Scan Interval (ms)", settings.btScanIntervalMs.toString()) { orchestrator.updateSettings(settings.copy(btScanIntervalMs = it.toLongOrNull() ?: 5000)) }
-            SettingsToggle("Auto-Clone NFC Tags", settings.nfcAutoClone) { orchestrator.updateSettings(settings.copy(nfcAutoClone = it)) }
-        }
-
-        // RemoteADB Configuration
-        SettingsCategory("RemoteADB Bridge") {
-            SettingsTextField("Default Port", settings.defaultAdbPort.toString()) { orchestrator.updateSettings(settings.copy(defaultAdbPort = it.toIntOrNull() ?: 5555)) }
-            SettingsToggle("Auto-Reconnect to Targets", settings.autoReconnect) { orchestrator.updateSettings(settings.copy(autoReconnect = it)) }
-        }
-
-        // Voice Configuration
-        SettingsCategory("Vocal Interface") {
-            SettingsSlider("Voice Speed", settings.voiceSpeed, 0.5f..2.0f) { orchestrator.updateSettings(settings.copy(voiceSpeed = it)) }
-            SettingsSlider("Voice Pitch", settings.voicePitch, 0.5f..2.0f) { orchestrator.updateSettings(settings.copy(voicePitch = it)) }
-        }
-
-        // Optimization Configuration
-        SettingsCategory("Hardware & Performance") {
-            SettingsToggle("Low Power Mode (Moto XT2617V Opt)", settings.lowPowerMode) { orchestrator.updateSettings(settings.copy(lowPowerMode = it)) }
+        // Hardware Section
+        SettingsSection("HARDWARE & OPTIMIZATION") {
+            SettingsSwitch(
+                label = "Low Power Mode",
+                checked = settings.lowPowerMode,
+                onCheckedChange = { orchestrator.updateSettings(settings.copy(lowPowerMode = it)) }
+            )
+            SettingsTextField(
+                label = "CPU Governor",
+                value = settings.cpuGovernorMode,
+                onValueChange = { orchestrator.updateSettings(settings.copy(cpuGovernorMode = it)) }
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
         
         Button(
-            onClick = { orchestrator.executeCommand("sys factory-reset") },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-            modifier = Modifier.fillMaxWidth()
+            onClick = { /* In production, this would save to SharedPreferences/DataStore */ },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = HoloCyan.copy(alpha = 0.2f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, HoloCyan)
         ) {
-            Text("RESTORE MISSION DEFAULTS")
+            Text("COMMIT SOVEREIGN CHANGES", color = HoloCyan)
         }
     }
 }
 
 @Composable
-fun SettingsCategory(title: String, content: @Composable ColumnScope.() -> Unit) {
+fun SettingsSection(title: String, content: @Composable ColumnScope.() -> Unit) {
     Column(modifier = Modifier.padding(vertical = 12.dp)) {
-        Text(title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
-        Divider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f))
-        content()
+        Text(title, style = MaterialTheme.typography.labelLarge, color = HoloBlue)
+        Spacer(modifier = Modifier.height(8.dp))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = HoloDarkBlueTrans),
+            border = androidx.compose.foundation.BorderStroke(0.5.dp, HoloCyanTrans)
+        ) {
+            Column(modifier = Modifier.padding(12.dp)) {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsSlider(label: String, value: Float, range: ClosedFloatingPointRange<Float> = 0f..1f, onValueChange: (Float) -> Unit) {
+    Column(modifier = Modifier.padding(vertical = 8.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(label, style = MaterialTheme.typography.bodySmall, color = HoloWhite)
+            Text("%.2f".format(value), style = MaterialTheme.typography.labelSmall, color = HoloCyan)
+        }
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = range,
+            colors = SliderDefaults.colors(thumbColor = HoloCyan, activeTrackColor = HoloCyan, inactiveTrackColor = HoloBlueTrans)
+        )
+    }
+}
+
+@Composable
+fun SettingsSwitch(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(label, style = MaterialTheme.typography.bodySmall, color = HoloWhite)
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(checkedThumbColor = HoloCyan, checkedTrackColor = HoloBlue)
+        )
     }
 }
 
@@ -107,31 +183,15 @@ fun SettingsTextField(label: String, value: String, onValueChange: (String) -> U
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        singleLine = true
+        label = { Text(label, fontSize = 10.sp) },
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        textStyle = MaterialTheme.typography.bodySmall.copy(color = HoloWhite),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = HoloCyan,
+            unfocusedBorderColor = HoloBlueTrans,
+            focusedLabelColor = HoloCyan,
+            unfocusedLabelColor = androidx.compose.ui.graphics.Color.Gray
+        )
     )
 }
 
-@Composable
-fun SettingsToggle(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
-    }
-}
-
-@Composable
-fun SettingsSlider(label: String, value: Float, range: ClosedFloatingPointRange<Float>, onValueChange: (Float) -> Unit) {
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(label, style = MaterialTheme.typography.bodyLarge)
-            Text("%.2f".format(value), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
-        }
-        Slider(value = value, onValueChange = onValueChange, valueRange = range)
-    }
-}

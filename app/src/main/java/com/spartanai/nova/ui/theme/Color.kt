@@ -2,10 +2,18 @@ package com.spartanai.nova.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val NovaBlack = Color(0xFF000000)
-val NovaDarkGray = Color(0xFF121212)
-val NovaGreen = Color(0xFF00FF41) // Terminal Green
-val NovaRed = Color(0xFFFF3131) // Offensive Red
-val NovaBlue = Color(0xFF00D1FF) // AI Blue
-val NovaWhite = Color(0xFFFFFFFF)
-val NovaGray = Color(0xFF757575)
+// Holographic Palette
+val HoloCyan = Color(0xFF00D1FF)
+val HoloBlue = Color(0xFF0088FF)
+val HoloDarkBlue = Color(0xFF001A33)
+val HoloBlack = Color(0xFF000811)
+val HoloWhite = Color(0xFFE0F7FF)
+val HoloGreen = Color(0xFF00FFCC)
+val HoloRed = Color(0xFFFF3366)
+val HoloYellow = Color(0xFFFFD700)
+
+// Transparency variants for holographic effects
+val HoloCyanTrans = HoloCyan.copy(alpha = 0.2f)
+val HoloBlueTrans = HoloBlue.copy(alpha = 0.3f)
+val HoloDarkBlueTrans = HoloDarkBlue.copy(alpha = 0.8f)
+val HoloBlackTrans = HoloBlack.copy(alpha = 0.9f)

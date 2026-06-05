@@ -13,9 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spartanai.nova.core.NovaOrchestrator
-import com.spartanai.nova.ui.theme.NovaGreen
-import com.spartanai.nova.ui.theme.NovaBlue
-import com.spartanai.nova.ui.theme.NovaRed
+import com.spartanai.nova.ui.theme.*
 
 @Composable
 fun StatusHeader() {
@@ -25,8 +23,8 @@ fun StatusHeader() {
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 8.dp
+        color = HoloBlackTrans,
+        border = androidx.compose.foundation.BorderStroke(0.5.dp, HoloCyanTrans)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             // Top Row: Performance Metrics
@@ -35,8 +33,10 @@ fun StatusHeader() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                StatusIndicator(label = "CPU", value = "${systemStatus.cpuUsage}%", icon = Icons.Default.Memory, color = NovaGreen)
-                StatusIndicator(label = "RAM", value = "${systemStatus.ramUsage}%", icon = Icons.Default.Dns, color = NovaGreen)
+                StatusIndicator(label = "CPU", value = "${systemStatus.cpuUsage}%", icon = Icons.Default.Memory, color = HoloCyan)
+                StatusIndicator(label = "RAM", value = "${systemStatus.ramUsage}%", icon = Icons.Default.Dns, color = HoloCyan)
+                StatusIndicator(label = "BATT", value = "${systemStatus.batteryLevel}%", icon = Icons.Default.BatteryChargingFull, color = if (systemStatus.batteryLevel < 20) HoloRed else HoloGreen)
+                StatusIndicator(label = "NODES", value = "${systemStatus.nodeCount}", icon = Icons.Default.Hub, color = HoloBlue)
                 
                 if (dmsTime > 0) {
                     val minutes = dmsTime / 60000
@@ -45,14 +45,19 @@ fun StatusHeader() {
                         label = "DMS", 
                         value = "%02d:%02d".format(minutes, seconds), 
                         icon = Icons.Default.Timer, 
-                        color = if (dmsTime < 30000) NovaRed else Color.Yellow
+                        color = if (dmsTime < 30000) HoloRed else HoloYellow
                     )
                 }
                 
-                StatusIndicator(label = "THREAT", value = systemStatus.threatLevel, icon = Icons.Default.Warning, color = if (systemStatus.threatLevel == "LOW") NovaGreen else NovaRed)
+                StatusIndicator(label = "THREAT", value = systemStatus.threatLevel, icon = Icons.Default.Warning, color = if (systemStatus.threatLevel == "LOW") HoloGreen else HoloRed)
+                
+                IconButton(onClick = { orchestrator.scanNetwork() }, modifier = Modifier.size(24.dp)) {
+                    Icon(Icons.Default.Refresh, contentDescription = "Scan Network", tint = HoloCyan, modifier = Modifier.size(16.dp))
+                }
             }
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = Color.DarkGray, thickness = 0.5.dp)
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = HoloCyanTrans, thickness = 0.5.dp)
 
             // Bottom Row: Network & Security
             Row(
@@ -64,8 +69,9 @@ fun StatusHeader() {
                 SecurityTag(label = "PROXY", isActive = systemStatus.proxyActive, icon = Icons.Default.Security)
                 Text(
                     text = "C2: ${systemStatus.c2LinkStatus}",
-                    color = if (systemStatus.c2LinkStatus.contains("CONNECTED")) NovaBlue else Color.Gray,
+                    color = if (systemStatus.c2LinkStatus.contains("CONNECTED")) HoloBlue else Color.Gray,
                     fontSize = 10.sp,
+                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -76,7 +82,7 @@ fun StatusHeader() {
 @Composable
 fun StatusIndicator(label: String, value: String, icon: ImageVector, color: Color) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(14.dp))
+        Icon(icon, contentDescription = null, tint = color.copy(alpha = 0.8f), modifier = Modifier.size(14.dp))
         Spacer(modifier = Modifier.width(4.dp))
         Column {
             Text(label, color = Color.Gray, fontSize = 8.sp)
@@ -87,10 +93,12 @@ fun StatusIndicator(label: String, value: String, icon: ImageVector, color: Colo
 
 @Composable
 fun SecurityTag(label: String, isActive: Boolean, icon: ImageVector) {
-    val color = if (isActive) NovaBlue else Color.DarkGray
+    val color = if (isActive) HoloGreen else Color.DarkGray
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(12.dp))
         Spacer(modifier = Modifier.width(4.dp))
         Text(label, color = color, fontSize = 9.sp, fontWeight = FontWeight.SemiBold)
     }
 }
+
+

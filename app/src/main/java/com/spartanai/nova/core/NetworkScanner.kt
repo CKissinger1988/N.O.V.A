@@ -33,8 +33,19 @@ class NetworkScanner(private val orchestrator: NovaOrchestrator) {
             while (reader.readLine().also { line = it } != null) {
                 val device = parseNeighborLine(line!!)
                 if (device != null) {
-                    devices.add(device)
-                    orchestrator.addOutput("[SCAN]: Discovered ${device.ip} [${device.mac}]")
+                    // Phase 2: Hostname Resolution (Reverse DNS)
+                    val hostname = try {
+                        InetAddress.getByName(device.ip).canonicalHostName
+                    } catch (e: Exception) {
+                        "Unknown"
+                    }
+                    
+                    val enrichedDevice = device.copy(
+                        hostname = if (hostname == device.ip) "No PTR" else hostname
+                    )
+                    
+                    devices.add(enrichedDevice)
+                    orchestrator.addOutput("[SCAN]: Discovered ${enrichedDevice.ip} [${enrichedDevice.mac}] -> ${enrichedDevice.hostname}")
                 }
             }
             process.waitFor()
@@ -44,6 +55,7 @@ class NetworkScanner(private val orchestrator: NovaOrchestrator) {
         }
         return devices
     }
+
 
     private fun performActiveProbing() {
         val baseIP = getLocalIpPrefix() ?: return

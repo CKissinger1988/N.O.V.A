@@ -130,8 +130,11 @@ class NovaWidgetProvider : AppWidgetProvider() {
                 // Update system telemetry
                 views.setTextViewText(R.id.widget_cpu, "CPU: ${status.cpuUsage}%")
                 views.setTextViewText(R.id.widget_ram, "RAM: ${status.ramUsage}%")
-                views.setTextViewText(R.id.widget_c2, "C2: ${status.c2LinkStatus}")
+                views.setTextViewText(R.id.widget_battery, "BATT: ${status.batteryLevel}%")
+                views.setTextViewText(R.id.widget_node_count, "NODES: ${status.nodeCount}")
+                views.setTextViewText(R.id.widget_c2, "C2: ${status.c2LinkStatus.uppercase()}")
                 views.setTextViewText(R.id.widget_threat, "THREAT: ${status.threatLevel}")
+
 
                 // Header / Background click to launch MainActivity (opens standard security app)
                 val clickIntent = Intent(context, NovaWidgetProvider::class.java).apply {

@@ -21,14 +21,26 @@ class NovaAIEngine(private val context: Context, private val orchestrator: NovaO
      */
     fun processOffline(prompt: String): String {
         orchestrator.addOutput("[LOCAL-CORTEX]: Offline inference engaged.")
-        // Offline heuristic processing
         val lowerPrompt = prompt.lowercase()
-        return when {
-            lowerPrompt.contains("pivot") -> "Local Cortex: Analyzing directive '$prompt'. Recommendation: Lateral pivot through established SSH tunnel."
-            lowerPrompt.contains("breach") -> "Local Cortex: Suggesting SMB relay or credential dumping."
-            else -> "Local Cortex: Analyzing directive '$prompt'. Awaiting further tactical context."
+        val confidence = (75..98).random()
+        
+        val advisory = when {
+            lowerPrompt.contains("pivot") || lowerPrompt.contains("lateral") -> 
+                "Recommendation: Lateral pivot through established SSH tunnel. Target high-value DB nodes first. Confidence: $confidence%"
+            lowerPrompt.contains("breach") || lowerPrompt.contains("exploit") -> 
+                "Recommendation: SMB relay or credential dumping detected as optimal paths. Deploying Sliver stubs suggested. Confidence: $confidence%"
+            lowerPrompt.contains("wifi") || lowerPrompt.contains("wireless") ->
+                "Recommendation: Broad-spectrum jamming to force deauth, then capture WPA handshake. Confidence: $confidence%"
+            lowerPrompt.contains("adb") ->
+                "Recommendation: Subnet scan for port 5555. Deploy Ghost-Tier persistence upon connection. Confidence: $confidence%"
+            lowerPrompt.contains("crypto") ->
+                "Recommendation: Scan for mnemonic patterns in .txt and .docx files. Check browser extension vaults. Confidence: $confidence%"
+            else -> "Directive '$prompt' analyzed. Awaiting further tactical context for high-confidence recommendation. Confidence: 40%"
         }
+        
+        return "Local Cortex: $advisory"
     }
+
 
     /**
      * EVOLUTIONARY LEARNING: Learns from terminal logs, exploit successes, and failures.

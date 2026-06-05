@@ -11,16 +11,17 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = NovaGreen,
-    secondary = NovaBlue,
-    tertiary = NovaRed,
-    background = NovaBlack,
-    surface = NovaDarkGray,
-    onPrimary = NovaBlack,
-    onSecondary = NovaBlack,
-    onTertiary = NovaWhite,
-    onBackground = NovaGreen,
-    onSurface = NovaWhite,
+    primary = HoloCyan,
+    secondary = HoloBlue,
+    tertiary = HoloGreen,
+    background = HoloBlack,
+    surface = HoloDarkBlue,
+    onPrimary = HoloBlack,
+    onSecondary = HoloWhite,
+    onTertiary = HoloBlack,
+    onBackground = HoloWhite,
+    onSurface = HoloCyan,
+    error = HoloRed
 )
 
 @Composable
@@ -33,7 +34,7 @@ fun NOVATheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb()
+            window.statusBarColor = HoloBlack.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }

@@ -21,6 +21,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Settings : Screen("settings", "Settings", Icons.Default.Settings)
 
     companion object {
-        val items = listOf(Terminal, Tools)
+        val items = listOf(Terminal, WarRoom, Spectrum, AI, Tools)
     }
 }
+

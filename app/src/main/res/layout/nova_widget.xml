@@ -19,14 +19,15 @@
             android:layout_height="32dp"
             android:src="@drawable/ic_launcher_nova"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:alpha="0.8" />
 
         <TextView
             android:id="@+id/widget_nova_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="N.O.V.A. SOC"
-            android:textColor="#00FF41"
+            android:text="N.O.V.A. SUPREME"
+            android:textColor="#00D1FF"
             android:textStyle="bold"
             android:textSize="15sp"
             android:layout_toEndOf="@id/widget_nova_logo"
@@ -37,8 +38,8 @@
             android:id="@+id/widget_nova_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tactical Command System"
-            android:textColor="#00D1FF"
+            android:text="Tactical Command System v2"
+            android:textColor="#0088FF"
             android:textSize="9sp"
             android:layout_toEndOf="@id/widget_nova_logo"
             android:layout_marginStart="8dp"
@@ -59,8 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CPU: --%"
-                android:textColor="#00FF41"
-                android:textSize="12sp"
+                android:textColor="#00FFCC"
+                android:textSize="11sp"
                 android:fontFamily="monospace" />
 
             <TextView
@@ -68,18 +69,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="RAM: --%"
-                android:textColor="#00FF41"
-                android:textSize="12sp"
+                android:textColor="#00FFCC"
+                android:textSize="11sp"
                 android:fontFamily="monospace" />
 
             <TextView
-                android:id="@+id/widget_c2"
+                android:id="@+id/widget_battery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="C2: DISCONNECTED"
-                android:textColor="#00D1FF"
+                android:text="BATT: --%"
+                android:textColor="#00FFCC"
                 android:textSize="11sp"
-                android:textStyle="bold"
                 android:fontFamily="monospace" />
         </LinearLayout>
 
@@ -93,22 +93,33 @@
             android:gravity="end">
 
             <TextView
-                android:id="@+id/widget_threat"
+                android:id="@+id/widget_node_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="THREAT: LOW"
-                android:textColor="#00FF41"
-                android:textSize="11sp"
+                android:text="NODES: 0"
+                android:textColor="#0088FF"
+                android:textSize="10sp"
                 android:textStyle="bold"
                 android:fontFamily="monospace" />
 
             <TextView
-                android:id="@+id/widget_encryption"
+                android:id="@+id/widget_threat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SEC: ACTIVE"
-                android:textColor="#00FF41"
+                android:text="THREAT: LOW"
+                android:textColor="#00FFCC"
                 android:textSize="10sp"
+                android:textStyle="bold"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:id="@+id/widget_c2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C2: OFFLINE"
+                android:textColor="#0088FF"
+                android:textSize="9sp"
+                android:textStyle="bold"
                 android:fontFamily="monospace" />
         </LinearLayout>
 
@@ -125,9 +136,9 @@
                 android:layout_width="0dp"
                 android:layout_height="28dp"
                 android:layout_weight="1"
-                android:text="QUICK SCAN"
-                android:textColor="#00FF41"
-                android:background="#2200FF41"
+                android:text="RECON SCAN"
+                android:textColor="#00D1FF"
+                android:background="#2200D1FF"
                 android:gravity="center"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -139,14 +150,15 @@
                 android:layout_height="28dp"
                 android:layout_weight="1"
                 android:text="OMEGA WIPER"
-                android:textColor="#FF3B30"
-                android:background="#22FF3B30"
+                android:textColor="#FF3366"
+                android:background="#22FF3366"
                 android:gravity="center"
                 android:textSize="10sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
     </RelativeLayout>
+
 
     <!-- 2. Disguised Cover Layout (Master Baker) -->
     <RelativeLayout
