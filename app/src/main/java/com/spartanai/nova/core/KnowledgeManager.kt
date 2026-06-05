@@ -90,6 +90,10 @@ class KnowledgeManager {
             "AI-NOVA", "NOVA AI Hub", "Gemini/Claude strategic advisory.",
             "nova <prompt>", "AI Hub", riskLevel = RiskLevel.LOW
         ))
+        list.add(ExploitCommand(
+            "AI-GEMINI", "Gemini Direct Hub", "Direct Gemini-CLI strategic reasoning.",
+            "gemini <prompt>", "AI Hub", riskLevel = RiskLevel.LOW
+        ))
 
         // Xposure & darkdump
         list.add(ExploitCommand(

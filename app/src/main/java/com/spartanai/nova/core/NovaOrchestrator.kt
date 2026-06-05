@@ -129,7 +129,7 @@ class NovaOrchestrator private constructor() {
             command.startsWith("war-room") -> addOutput("[WAR-ROOM]: Topology re-scan initiated.")
             command.startsWith("peripheral") -> peripheralManager?.detectPeripherals()
             command.startsWith("kali") -> toggleKali()
-            command.startsWith("nova ") -> processAIRequest(command)
+            command.startsWith("nova ") || command.startsWith("gemini ") -> processAIRequest(command)
             command.startsWith("adverse analyze") -> handleAATMF(command)
             command.startsWith("ghost") -> handleGhost(command)
             command.startsWith("afe") -> handleAFE(command)
@@ -357,10 +357,10 @@ class NovaOrchestrator private constructor() {
     }
 
     private fun processAIRequest(request: String) {
-        val prompt = if (request.startsWith("nova ")) {
-            request.removePrefix("nova ").trim()
-        } else {
-            request.removePrefix("ai").trim()
+        val prompt = when {
+            request.startsWith("nova ") -> request.removePrefix("nova ").trim()
+            request.startsWith("gemini ") -> request.removePrefix("gemini ").trim()
+            else -> request.removePrefix("ai").trim()
         }
         addOutput("[GEMINI-CLI]: Analyzing payload for vulnerability patterns...")
         // In production, this would use a ProcessBuilder to call the gemini-cli binary
