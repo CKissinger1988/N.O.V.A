@@ -2,9 +2,12 @@ package com.spartanai.nova.core
 
 import com.spartanai.nova.data.model.ExploitCommand
 import com.spartanai.nova.data.model.NovaSettings
+import com.spartanai.nova.data.model.DiscoveredDevice
+import com.spartanai.nova.ui.widget.NovaWidgetProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import android.util.Log
 
 /**
  * Main Orchestrator for N.O.V.A. (Network Offensive Vulnerability Application)
@@ -20,6 +23,9 @@ class NovaOrchestrator private constructor() {
 
     private val _systemStatus = MutableStateFlow(SystemStatus())
     val systemStatus = _systemStatus.asStateFlow()
+
+    private val _discoveredDevices = MutableStateFlow<List<DiscoveredDevice>>(emptyList())
+    val discoveredDevices = _discoveredDevices.asStateFlow()
 
     private val _settings = MutableStateFlow(NovaSettings())
     val settings = _settings.asStateFlow()
@@ -50,13 +56,27 @@ class NovaOrchestrator private constructor() {
     private var swarmManager: SwarmManager? = null
     private var duressManager: DuressManager? = null
     private var stegoManager: StegoManager? = null
+    private var networkScanner: NetworkScanner? = null
+    private var portScanner: PortScanner? = null
+    private var panicManager: PanicManager? = null
+    private var dms: DeadMansSwitch? = null
+    private var phishingServer: PhishingServer? = null
     private val securityManager = SecurityManager()
+    private var appContext: android.content.Context? = null
+
+    val capturedCredentials: kotlinx.coroutines.flow.StateFlow<List<String>> by lazy { phishingServer!!.capturedCredentials }
+    val dmsRemainingTime: kotlinx.coroutines.flow.StateFlow<Long> by lazy { dms!!.remainingTime }
 
     init {
         _knowledgeBase.value = knowledgeManager.fetchKnowledge()
     }
 
+    private var isInitialized = false
+
     fun initialize(context: android.content.Context) {
+        if (isInitialized) return
+        isInitialized = true
+        appContext = context.applicationContext
         voiceManager = VoiceManager(context) { command ->
             executeCommand(command)
         }
@@ -71,11 +91,44 @@ class NovaOrchestrator private constructor() {
         swarmManager = SwarmManager(this)
         duressManager = DuressManager(context, this)
         stegoManager = StegoManager(this)
+        networkScanner = NetworkScanner(this)
+        portScanner = PortScanner(this)
+        panicManager = PanicManager(context, this)
+        panicManager?.startListening()
+        dms = DeadMansSwitch(context, this)
+        phishingServer = PhishingServer(this)
         
         addOutput("Nova System Initialized. Voice Control: ACTIVE.")
         speak("Nova System Online. Ready for mission directives.")
         startStatusSimulation()
         startAutoScanners()
+    }
+
+    fun armDMS(minutes: Int) {
+        dms?.arm(minutes)
+    }
+
+    fun resetDMS() {
+        dms?.reset()
+    }
+
+    fun inspectNode(ip: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val openPorts = portScanner?.scanPorts(ip) ?: emptyList()
+            val guessedOS = portScanner?.guessOS(ip, openPorts) ?: "Unknown"
+            
+            val current = _discoveredDevices.value.toMutableList()
+            val index = current.indexOfFirst { it.ip == ip }
+            if (index != -1) {
+                current[index] = current[index].copy(
+                    openPorts = openPorts,
+                    guessedOS = guessedOS,
+                    status = if (openPorts.isNotEmpty()) com.spartanai.nova.data.model.DeviceStatus.VULNERABLE else com.spartanai.nova.data.model.DeviceStatus.SECURE
+                )
+                _discoveredDevices.value = current
+                speak("Node inspection for $ip complete. Found ${openPorts.size} open ports. Predicted OS: $guessedOS.")
+            }
+        }
     }
 
     private fun startStatusSimulation() {
@@ -90,6 +143,8 @@ class NovaOrchestrator private constructor() {
                     proxyActive = _isKaliActive.value,
                     threatLevel = if (_systemStatus.value.cpuUsage > 40) "MEDIUM" else "LOW"
                 )
+                // Update Widgets
+                appContext?.let { NovaWidgetProvider.refreshAllWidgets(it) }
                 delay(5000)
             }
         }
@@ -103,6 +158,10 @@ class NovaOrchestrator private constructor() {
                 }
                 // Mobile network scan
                 mobileNetworkManager?.scanMobileNetworks()
+                
+                // Periodic network recon
+                scanNetwork()
+                
                 delay(30000) // 30 second interval for background scanning
             }
         }
@@ -132,7 +191,10 @@ class NovaOrchestrator private constructor() {
                 // In a real app, passing the proper context or utilizing a singleton
                 addOutput("[OMEGA]: Purging system memory...")
             }
-            command.startsWith("war-room") -> addOutput("[WAR-ROOM]: Topology re-scan initiated.")
+            command.startsWith("war-room") -> {
+                addOutput("[WAR-ROOM]: Topology re-scan initiated.")
+                scanNetwork()
+            }
             command.startsWith("peripheral") -> peripheralManager?.detectPeripherals()
             command.startsWith("kali") -> toggleKali()
             command.startsWith("nova ") || command.startsWith("gemini ") -> processAIRequest(command)
@@ -203,6 +265,30 @@ class NovaOrchestrator private constructor() {
         if (line.contains("[REVERSE SHELL]")) {
             _systemStatus.value = _systemStatus.value.copy(c2LinkStatus = "ACTIVE (REVERSE SHELL)")
         }
+
+        // Sync harvested tokens with Kali bridge
+        if (line.contains("[PHISH]: TOKEN HARVESTED")) {
+            exportCapturedData()
+        }
+    }
+
+    private fun exportCapturedData() {
+        try {
+            val file = java.io.File("/sdcard/Download/SpartanCore/harvested.json")
+            if (!file.parentFile.exists()) file.parentFile.mkdirs()
+            
+            val credentials = phishingServer?.capturedCredentials?.value ?: emptyList()
+            val json = StringBuilder("[\n")
+            credentials.forEachIndexed { index, cred ->
+                json.append("  \"$cred\"${if (index < credentials.size - 1) "," else ""}\n")
+            }
+            json.append("]")
+            
+            file.writeText(json.toString())
+            addOutput("[KALI-BRIDGE]: Captured data synced to ${file.absolutePath}")
+        } catch (e: Exception) {
+            Log.e("NovaOrchestrator", "Failed to export captured data: ${e.message}")
+        }
     }
 
     fun speak(text: String) {
@@ -216,6 +302,39 @@ class NovaOrchestrator private constructor() {
     fun updateSettings(newSettings: NovaSettings) {
         _settings.value = newSettings
         addOutput("[SYSTEM]: Settings updated successfully.")
+    }
+
+    fun scanNetwork() {
+        GlobalScope.launch(Dispatchers.IO) {
+            val results = networkScanner?.scanLocalSubnet() ?: emptyList()
+            _discoveredDevices.value = results
+            if (results.isNotEmpty()) {
+                speak("Network scan complete. ${results.size} targets identified.")
+                exportReconData(results)
+            }
+        }
+    }
+
+    private fun exportReconData(devices: List<DiscoveredDevice>) {
+        try {
+            val file = java.io.File("/sdcard/Download/SpartanCore/recon.json")
+            if (!file.parentFile.exists()) file.parentFile.mkdirs()
+            
+            val json = StringBuilder("[\n")
+            devices.forEachIndexed { index, device ->
+                json.append("  {\n")
+                json.append("    \"ip\": \"${device.ip}\",\n")
+                json.append("    \"mac\": \"${device.mac}\",\n")
+                json.append("    \"status\": \"${device.status.name}\"\n")
+                json.append("  }${if (index < devices.size - 1) "," else ""}\n")
+            }
+            json.append("]")
+            
+            file.writeText(json.toString())
+            addOutput("[KALI-BRIDGE]: Recon data synced to ${file.absolutePath}")
+        } catch (e: Exception) {
+            Log.e("NovaOrchestrator", "Failed to export recon data: ${e.message}")
+        }
     }
 
     private fun handleSTEPP(command: String) {
@@ -247,7 +366,10 @@ class NovaOrchestrator private constructor() {
         addOutput("RemoteADB: Initializing unified bridge...")
         when {
             command.contains("connect") -> addOutput("[ADB]: Attempting secure connection to ${command.substringAfter("connect").trim()}...")
-            command.contains("scan") -> addOutput("[ADB]: Scanning subnet for debug-enabled devices...")
+            command.contains("scan") -> {
+                addOutput("[ADB]: Scanning subnet for debug-enabled devices...")
+                scanNetwork()
+            }
             command.contains("devices") -> addOutput("[ADB]: Listing attached authorized devices...")
             else -> addOutput("[ADB]: Executing generic ADB directive.")
         }
@@ -256,7 +378,10 @@ class NovaOrchestrator private constructor() {
     private fun handleBluetooth(command: String) {
         addOutput("BLUETOOTH: Initiating wireless spectrum analysis...")
         when {
-            command.contains("scan") -> addOutput("[BT]: Discovery mode engaged. Identifying high-value targets.")
+            command.contains("scan") -> {
+                addOutput("[BT]: Discovery mode engaged. Identifying high-value targets.")
+                scanNetwork()
+            }
             command.contains("attack") -> addOutput("[BT]: Executing remote BLE exploit on target.")
             command.contains("jam") -> addOutput("[BT]: Broad-spectrum interference active.")
             else -> addOutput("[BT]: Executing wireless directive.")
@@ -275,6 +400,10 @@ class NovaOrchestrator private constructor() {
 
     private fun handlePhishing(command: String) {
         addOutput("[PHISH]: Active Phishing Hub directive: ${command.substringAfter("phish").trim()}")
+        when {
+            command.contains("start") -> phishingServer?.start()
+            command.contains("stop") -> phishingServer?.stop()
+        }
     }
 
     private fun handleSpectrum(command: String) {

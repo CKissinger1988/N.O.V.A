@@ -6,16 +6,15 @@ try {
   const sanitizingLines = output.split('\n').filter(line => line.includes('[*] Sanitizing'));
   
   if (sanitizingLines.length > 0) {
-    
-    sanitizingLines.forEach(line => ));
-    
-    
+    console.log('\x1b[91m[-] Purity check failed! The following files need sanitization:\x1b[0m');
+    sanitizingLines.forEach(line => console.log(line));
+    process.exit(1);
   } else {
     console.log('\x1b[92m[+] Purity check passed! Codebase is clean.\x1b[0m');
     process.exit(0);
   }
 } catch (error) {
-  
-  
+  console.error('\x1b[91m[-] Error running purity check:\x1b[0m', error);
+  process.exit(1);
 }
 

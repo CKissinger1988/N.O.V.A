@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 1. Cyber-Offensive Layout (N.O.V.A SOC) -->
+    <RelativeLayout
+        android:id="@+id/widget_nova_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_background_nova"
+        android:padding="12dp"
+        android:visibility="visible">
+
+        <!-- Header -->
+        <ImageView
+            android:id="@+id/widget_nova_logo"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_launcher_nova"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/widget_nova_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N.O.V.A. SOC"
+            android:textColor="#00FF41"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/widget_nova_logo"
+            android:layout_marginStart="8dp"
+            android:layout_alignTop="@id/widget_nova_logo" />
+
+        <TextView
+            android:id="@+id/widget_nova_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tactical Command System"
+            android:textColor="#00D1FF"
+            android:textSize="9sp"
+            android:layout_toEndOf="@id/widget_nova_logo"
+            android:layout_marginStart="8dp"
+            android:layout_below="@id/widget_nova_title" />
+
+        <!-- Telemetry Data -->
+        <LinearLayout
+            android:id="@+id/widget_nova_telemetry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/widget_nova_logo"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/widget_cpu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CPU: --%"
+                android:textColor="#00FF41"
+                android:textSize="12sp"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:id="@+id/widget_ram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RAM: --%"
+                android:textColor="#00FF41"
+                android:textSize="12sp"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:id="@+id/widget_c2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C2: DISCONNECTED"
+                android:textColor="#00D1FF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:fontFamily="monospace" />
+        </LinearLayout>
+
+        <!-- Status Panel -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/widget_nova_telemetry"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/widget_threat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="THREAT: LOW"
+                android:textColor="#00FF41"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:id="@+id/widget_encryption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SEC: ACTIVE"
+                android:textColor="#00FF41"
+                android:textSize="10sp"
+                android:fontFamily="monospace" />
+        </LinearLayout>
+
+        <!-- Action Buttons at bottom -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/widget_btn_scan"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="QUICK SCAN"
+                android:textColor="#00FF41"
+                android:background="#2200FF41"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/widget_btn_omega"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="OMEGA WIPER"
+                android:textColor="#FF3B30"
+                android:background="#22FF3B30"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- 2. Disguised Cover Layout (Master Baker) -->
+    <RelativeLayout
+        android:id="@+id/widget_baking_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_background_baking"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- Header -->
+        <ImageView
+            android:id="@+id/widget_baking_logo"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_launcher_baking"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/widget_baking_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Master Baker"
+            android:textColor="#4A3728"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_toEndOf="@id/widget_baking_logo"
+            android:layout_marginStart="8dp"
+            android:layout_alignTop="@id/widget_baking_logo" />
+
+        <TextView
+            android:id="@+id/widget_baking_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kitchen Assistant &amp; Timers"
+            android:textColor="#8B5E3C"
+            android:textSize="9sp"
+            android:layout_toEndOf="@id/widget_baking_logo"
+            android:layout_marginStart="8dp"
+            android:layout_below="@id/widget_baking_title" />
+
+        <!-- Recipe/Oven Details -->
+        <LinearLayout
+            android:id="@+id/widget_baking_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/widget_baking_logo"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/widget_recipe_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recipe: Sourdough Bread"
+                android:textColor="#4A3728"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/widget_oven_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Oven: Preheating (180°C)"
+                android:textColor="#4A3728"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/widget_timer_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Timer: Ready"
+                android:textColor="#8B5E3C"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Status Panel -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/widget_baking_details"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/widget_scale_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SCALE: TARE"
+                android:textColor="#8B5E3C"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/widget_connection_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wifi Scale: Connected"
+                android:textColor="#4A3728"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- Action Buttons at bottom -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/widget_btn_recipe"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="NEXT RECIPE"
+                android:textColor="#4A3728"
+                android:background="#114A3728"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/widget_btn_timer"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="START TIMER"
+                android:textColor="#8B5E3C"
+                android:background="#118B5E3C"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

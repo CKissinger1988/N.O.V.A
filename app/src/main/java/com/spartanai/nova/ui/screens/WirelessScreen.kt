@@ -43,20 +43,20 @@ fun WirelessScreen() {
 
 @Composable
 fun BluetoothSection(orchestrator: NovaOrchestrator) {
-    val btDevices = listOf("SmartWatch X", "Hidden Device", "Victim-PC", "Car-Multimedia") // Mock
+    val devices by orchestrator.discoveredDevices.collectAsState()
     
     Column {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Bluetooth Discovery", style = MaterialTheme.typography.titleLarge)
+            Text("Network Discovery", style = MaterialTheme.typography.titleLarge)
             IconButton(onClick = { orchestrator.executeCommand("bt scan") }) {
                 Icon(Icons.Default.Refresh, contentDescription = "Scan")
             }
         }
         
         LazyColumn(modifier = Modifier.weight(1f)) {
-            items(btDevices) { device ->
-                WirelessTargetItem(device, Icons.Default.Bluetooth, onAttack = {
-                    orchestrator.executeCommand("bt attack $device")
+            items(devices) { device ->
+                WirelessTargetItem("${device.ip} (${device.mac})", Icons.Default.Devices, onAttack = {
+                    orchestrator.executeCommand("bt attack ${device.ip}")
                 })
             }
         }

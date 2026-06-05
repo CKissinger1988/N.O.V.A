@@ -43,6 +43,19 @@
                 android:resource="@xml/device_filter" />
         </receiver>
 
+        <receiver android:name=".ui.widget.NovaWidgetProvider" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ACTION_NOVA_WIDGET_CLICK" />
+                <action android:name="ACTION_NOVA_WIDGET_SCAN" />
+                <action android:name="ACTION_NOVA_WIDGET_OMEGA" />
+                <action android:name="ACTION_NOVA_WIDGET_RECIPE" />
+                <action android:name="ACTION_NOVA_WIDGET_TIMER" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/nova_widget_info" />
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
