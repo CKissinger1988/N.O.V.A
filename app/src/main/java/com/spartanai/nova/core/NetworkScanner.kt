@@ -22,6 +22,7 @@ class NetworkScanner(private val orchestrator: NovaOrchestrator) {
         val devices = mutableListOf<DiscoveredDevice>()
         
         // Phase 1: Active Probing to populate ARP table
+        orchestrator.logAndSpeak("[NETWORK]: Initiating parallel coroutine ping sweep...", speak = true)
         performActiveProbing()
         
         try {
@@ -45,13 +46,19 @@ class NetworkScanner(private val orchestrator: NovaOrchestrator) {
                     )
                     
                     devices.add(enrichedDevice)
-                    orchestrator.addOutput("[SCAN]: Discovered ${enrichedDevice.ip} [${enrichedDevice.mac}] -> ${enrichedDevice.hostname}")
+                    orchestrator.logAndSpeak("[SCAN]: Discovered ${enrichedDevice.ip} [${enrichedDevice.mac}] -> ${enrichedDevice.hostname}")
                 }
             }
             process.waitFor()
+            
+            if (devices.isNotEmpty()) {
+                orchestrator.logAndSpeak("[RECON]: Subnet scan finalized. ${devices.size} active nodes identified.", speak = true)
+            } else {
+                orchestrator.logAndSpeak("[RECON]: Subnet scan complete. No external nodes detected.", speak = true)
+            }
         } catch (e: Exception) {
             Log.e(tag, "ARP scan failed: ${e.message}")
-            orchestrator.addOutput("[ERROR]: Network recon failure: ${e.message}")
+            orchestrator.logAndSpeak("[ERROR]: Network recon failure: ${e.message}", speak = true)
         }
         return devices
     }
@@ -59,7 +66,7 @@ class NetworkScanner(private val orchestrator: NovaOrchestrator) {
 
     private fun performActiveProbing() {
         val baseIP = getLocalIpPrefix() ?: return
-        orchestrator.addOutput("[NETWORK]: Initiating active subnet probe on $baseIP.0/24...")
+        orchestrator.addOutput("[NETWORK]: Targeting range $baseIP.0/24...")
         
         // Multi-threaded ping sweep (parallel coroutines)
         runBlocking {

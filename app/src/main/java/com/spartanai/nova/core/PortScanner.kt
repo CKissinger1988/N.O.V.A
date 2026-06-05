@@ -29,7 +29,7 @@ class PortScanner(private val orchestrator: NovaOrchestrator) {
 
     suspend fun scanPorts(ip: String): List<Int> = withContext(Dispatchers.IO) {
         val openPorts = mutableListOf<Int>()
-        orchestrator.addOutput("[PORT-SCAN]: Probing high-value services on $ip...")
+        orchestrator.logAndSpeak("[PORT-SCAN]: Probing high-value services on $ip...", speak = true)
         
         val jobs = commonPorts.keys.map { port ->
             async {
@@ -41,6 +41,12 @@ class PortScanner(private val orchestrator: NovaOrchestrator) {
             }
         }
         jobs.awaitAll()
+        
+        if (openPorts.isNotEmpty()) {
+            orchestrator.logAndSpeak("[SCAN]: Target $ip has ${openPorts.size} open services.", speak = true)
+        } else {
+            orchestrator.logAndSpeak("[SCAN]: No common services detected on $ip.", speak = true)
+        }
         
         openPorts.sorted()
     }

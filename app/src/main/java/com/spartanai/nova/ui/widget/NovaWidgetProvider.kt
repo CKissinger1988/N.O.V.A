@@ -36,7 +36,15 @@ class NovaWidgetProvider : AppWidgetProvider() {
                 }
                 context.startActivity(launchIntent)
             }
+            "ACTION_NOVA_WIDGET_AI" -> {
+                val launchIntent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra("TARGET_SCREEN", "AI")
+                }
+                context.startActivity(launchIntent)
+            }
             "ACTION_NOVA_WIDGET_SCAN" -> {
+
                 NovaOrchestrator.getInstance().executeCommand("war-room scan")
                 refreshAllWidgets(context)
             }
@@ -83,12 +91,16 @@ class NovaWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.widget_recipe_name, "Recipe: ${RECIPES[recipeIdx]}")
                 views.setTextViewText(R.id.widget_oven_temp, "Oven: ${OVEN_TEMPS[recipeIdx]}")
                 
+                // Update AI Chef Feed (Disguised Tactical Advisory)
+                val advisory = orchestrator.tacticalAdvisory.value
+                views.setTextViewText(R.id.widget_chef_advisory, "Optimal consistency: $advisory")
+
                 if (timerActive) {
                     views.setTextViewText(R.id.widget_timer_status, "Timer: 15m remaining")
-                    views.setTextViewText(R.id.widget_btn_timer, "STOP TIMER")
+                    views.setTextViewText(R.id.widget_btn_timer, "STOP")
                 } else {
                     views.setTextViewText(R.id.widget_timer_status, "Timer: Ready")
-                    views.setTextViewText(R.id.widget_btn_timer, "START TIMER")
+                    views.setTextViewText(R.id.widget_btn_timer, "TIMER")
                 }
 
                 // Header / Background click to launch MainActivity (opens BakingScreen)
@@ -111,6 +123,16 @@ class NovaWidgetProvider : AppWidgetProvider() {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
                 views.setOnClickPendingIntent(R.id.widget_btn_recipe, pendingRecipe)
+
+                // AI Chef button (Disguised AI Hub)
+                val aiIntent = Intent(context, NovaWidgetProvider::class.java).apply {
+                    action = "ACTION_NOVA_WIDGET_AI"
+                }
+                val pendingAi = PendingIntent.getBroadcast(
+                    context, 103, aiIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+                views.setOnClickPendingIntent(R.id.widget_btn_chef, pendingAi)
 
                 // Start Timer button
                 val timerIntent = Intent(context, NovaWidgetProvider::class.java).apply {
@@ -135,6 +157,9 @@ class NovaWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.widget_c2, "C2: ${status.c2LinkStatus.uppercase()}")
                 views.setTextViewText(R.id.widget_threat, "THREAT: ${status.threatLevel}")
 
+                // Update Gemini Feed
+                val advisory = orchestrator.tacticalAdvisory.value
+                views.setTextViewText(R.id.widget_ai_advisory, advisory)
 
                 // Header / Background click to launch MainActivity (opens standard security app)
                 val clickIntent = Intent(context, NovaWidgetProvider::class.java).apply {
@@ -147,7 +172,18 @@ class NovaWidgetProvider : AppWidgetProvider() {
                 views.setOnClickPendingIntent(R.id.widget_nova_logo, pendingClick)
                 views.setOnClickPendingIntent(R.id.widget_nova_title, pendingClick)
 
+                // Gemini button
+                val aiIntent = Intent(context, NovaWidgetProvider::class.java).apply {
+                    action = "ACTION_NOVA_WIDGET_AI"
+                }
+                val pendingAi = PendingIntent.getBroadcast(
+                    context, 203, aiIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+                views.setOnClickPendingIntent(R.id.widget_btn_ai, pendingAi)
+
                 // Quick Scan button
+
                 val scanIntent = Intent(context, NovaWidgetProvider::class.java).apply {
                     action = "ACTION_NOVA_WIDGET_SCAN"
                 }

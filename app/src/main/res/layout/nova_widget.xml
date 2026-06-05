@@ -85,6 +85,7 @@
 
         <!-- Status Panel -->
         <LinearLayout
+            android:id="@+id/widget_nova_status_panel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -123,39 +124,86 @@
                 android:fontFamily="monospace" />
         </LinearLayout>
 
+        <!-- Gemini AI Feed Section -->
+        <LinearLayout
+            android:id="@+id/widget_gemini_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/widget_nova_telemetry"
+            android:layout_marginTop="6dp"
+            android:background="#1100D1FF"
+            android:padding="6dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="> GEMINI UPLINK ACTIVE"
+                android:textColor="#00D1FF"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:fontFamily="monospace" />
+
+            <TextView
+                android:id="@+id/widget_ai_advisory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Awaiting reconnaissance data for tactical modeling..."
+                android:textColor="#E0F7FF"
+                android:textSize="10sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:fontFamily="monospace"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
         <!-- Action Buttons at bottom -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="6dp">
 
             <TextView
                 android:id="@+id/widget_btn_scan"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:text="RECON SCAN"
+                android:text="RECON"
                 android:textColor="#00D1FF"
                 android:background="#2200D1FF"
                 android:gravity="center"
-                android:textSize="10sp"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:layout_marginEnd="6dp" />
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/widget_btn_ai"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:text="GEMINI"
+                android:textColor="#00FFCC"
+                android:background="#2200FFCC"
+                android:gravity="center"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="4dp" />
 
             <TextView
                 android:id="@+id/widget_btn_omega"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:text="OMEGA WIPER"
+                android:text="OMEGA"
                 android:textColor="#FF3366"
                 android:background="#22FF3366"
                 android:gravity="center"
-                android:textSize="10sp"
+                android:textSize="9sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
 
     </RelativeLayout>
 
@@ -226,19 +274,42 @@
                 android:text="Oven: Preheating (180°C)"
                 android:textColor="#4A3728"
                 android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- AI Chef Feed Section -->
+        <LinearLayout
+            android:id="@+id/widget_chef_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/widget_baking_details"
+            android:layout_marginTop="6dp"
+            android:background="#114A3728"
+            android:padding="6dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/widget_timer_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Timer: Ready"
-                android:textColor="#8B5E3C"
-                android:textSize="11sp"
+                android:text="> AI CHEF ADVISORY"
+                android:textColor="#4A3728"
+                android:textSize="8sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/widget_chef_advisory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Optimal hydration detected for current ambient temperature."
+                android:textColor="#4A3728"
+                android:textSize="10sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginTop="2dp" />
         </LinearLayout>
 
         <!-- Status Panel -->
         <LinearLayout
+            android:id="@+id/widget_baking_status_panel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -256,12 +327,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/widget_connection_status"
+                android:id="@+id/widget_timer_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wifi Scale: Connected"
-                android:textColor="#4A3728"
-                android:textSize="10sp" />
+                android:text="Timer: Ready"
+                android:textColor="#8B5E3C"
+                android:textSize="10sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- Action Buttons at bottom -->
@@ -270,33 +342,47 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="6dp">
 
             <TextView
                 android:id="@+id/widget_btn_recipe"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:text="NEXT RECIPE"
+                android:text="NEXT"
                 android:textColor="#4A3728"
                 android:background="#114A3728"
                 android:gravity="center"
-                android:textSize="10sp"
+                android:textSize="9sp"
                 android:textStyle="bold"
-                android:layout_marginEnd="6dp" />
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/widget_btn_chef"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:text="CHEF"
+                android:textColor="#4A3728"
+                android:background="#114A3728"
+                android:gravity="center"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="4dp" />
 
             <TextView
                 android:id="@+id/widget_btn_timer"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:text="START TIMER"
+                android:text="TIMER"
                 android:textColor="#8B5E3C"
                 android:background="#118B5E3C"
                 android:gravity="center"
-                android:textSize="10sp"
+                android:textSize="9sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
 
     </RelativeLayout>
 

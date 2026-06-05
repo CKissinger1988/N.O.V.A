@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.spartanai.nova.core.NovaOrchestrator
 import com.spartanai.nova.data.model.NovaSettings
 import com.spartanai.nova.ui.theme.*
@@ -69,6 +71,12 @@ fun SettingsScreen() {
                 value = settings.aiModel,
                 onValueChange = { orchestrator.updateSettings(settings.copy(aiModel = it)) }
             )
+            SettingsTextField(
+                label = "AI API Key",
+                value = settings.aiApiKey,
+                visualTransformation = PasswordVisualTransformation(),
+                onValueChange = { orchestrator.updateSettings(settings.copy(aiApiKey = it)) }
+            )
             SettingsSlider(
                 label = "Temperature (Cortex Chaos)",
                 value = settings.aiTemperature,
@@ -78,6 +86,34 @@ fun SettingsScreen() {
                 label = "Autonomous Execution",
                 checked = settings.aiAutoExecute,
                 onCheckedChange = { orchestrator.updateSettings(settings.copy(aiAutoExecute = it)) }
+            )
+        }
+
+        // Local AI Infrastructure Section
+        SettingsSection("LOCAL AI INFRASTRUCTURE") {
+            SettingsTextField(
+                label = "LM-Studio Endpoint",
+                value = settings.lmStudioEndpoint,
+                onValueChange = { orchestrator.updateSettings(settings.copy(lmStudioEndpoint = it)) }
+            )
+            SettingsTextField(
+                label = "Ollama Endpoint",
+                value = settings.ollamaEndpoint,
+                onValueChange = { orchestrator.updateSettings(settings.copy(ollamaEndpoint = it)) }
+            )
+        }
+
+        // On-Device Tactical Cortex Section
+        SettingsSection("ON-DEVICE TACTICAL CORTEX") {
+            SettingsSwitch(
+                label = "Sovereign Local Inference",
+                checked = settings.localInferenceActive,
+                onCheckedChange = { orchestrator.updateSettings(settings.copy(localInferenceActive = it)) }
+            )
+            SettingsTextField(
+                label = "Model File Path (.gguf / .bin)",
+                value = settings.localModelPath,
+                onValueChange = { orchestrator.updateSettings(settings.copy(localModelPath = it)) }
             )
         }
 
@@ -179,11 +215,17 @@ fun SettingsSwitch(label: String, checked: Boolean, onCheckedChange: (Boolean) -
 }
 
 @Composable
-fun SettingsTextField(label: String, value: String, onValueChange: (String) -> Unit) {
+fun SettingsTextField(
+    label: String, 
+    value: String, 
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onValueChange: (String) -> Unit
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label, fontSize = 10.sp) },
+        visualTransformation = visualTransformation,
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
         textStyle = MaterialTheme.typography.bodySmall.copy(color = HoloWhite),
         colors = OutlinedTextFieldDefaults.colors(

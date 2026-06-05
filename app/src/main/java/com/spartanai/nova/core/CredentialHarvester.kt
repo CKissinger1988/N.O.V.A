@@ -15,20 +15,19 @@ class CredentialHarvester(private val orchestrator: NovaOrchestrator) {
         if (isHarvesting) return
         isHarvesting = true
         
-        orchestrator.addOutput("[HARVESTER]: Initiating deep secret extraction on $target")
-        orchestrator.speak("Initiating credential harvest on target $target")
+        orchestrator.logAndSpeak("[HARVESTER]: Initiating deep secret extraction on $target", speak = true)
 
         scope.launch {
             // 1. Scan filesystem for sensitive patterns (.env, .git, config.json)
-            orchestrator.addOutput("[HARVESTER]: Scanning filesystem for sensitive patterns...")
+            orchestrator.logAndSpeak("[HARVESTER]: Scanning filesystem for sensitive patterns...", speak = true)
             delay(1500)
             
             // 2. Extract memory artifacts (Mimikatz/Ghost logic)
-            orchestrator.addOutput("[HARVESTER]: Dumping memory artifacts for process migration...")
+            orchestrator.logAndSpeak("[HARVESTER]: Dumping memory artifacts for process migration...", speak = true)
             delay(2000)
             
             // 3. Intercept network auth tokens
-            orchestrator.addOutput("[HARVESTER]: Intercepting Bearer tokens and session cookies...")
+            orchestrator.logAndSpeak("[HARVESTER]: Intercepting Bearer tokens and session cookies...", speak = true)
             delay(1000)
             
             val foundSecrets = listOf("API_KEY=sk-nova-...", "DB_PASS=admin123", "AWS_SECRET=...")
@@ -37,8 +36,7 @@ class CredentialHarvester(private val orchestrator: NovaOrchestrator) {
                 // Securely store in SecCom vault
             }
             
-            orchestrator.addOutput("[SUCCESS]: Harvest complete. 3 high-value secrets correlated.")
-            orchestrator.speak("Credential harvest complete. High value secrets acquired.")
+            orchestrator.logAndSpeak("[SUCCESS]: Harvest complete. ${foundSecrets.size} high-value secrets correlated.", speak = true)
             isHarvesting = false
         }
     }

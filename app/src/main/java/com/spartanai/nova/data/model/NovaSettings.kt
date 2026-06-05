@@ -4,6 +4,11 @@ data class NovaSettings(
     // AI Settings (Deep Manual Control)
     val aiProvider: String = "Gemini",
     val aiModel: String = "gemini-1.5-pro",
+    val aiApiKey: String = "",
+    val localModelPath: String = "/sdcard/NovaAI/model.gguf",
+    val localInferenceActive: Boolean = false,
+    val lmStudioEndpoint: String = "http://localhost:1234/v1",
+    val ollamaEndpoint: String = "http://localhost:11434/api",
     val aiTemperature: Float = 0.7f,
     val aiTopP: Float = 0.95f,
     val aiTopK: Int = 40,

@@ -26,8 +26,26 @@ import com.spartanai.nova.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NovaApp() {
+fun NovaApp(startScreen: String? = null) {
     val navController = rememberNavController()
+    
+    // Process initial navigation from widget
+    LaunchedEffect(startScreen) {
+        startScreen?.let { route ->
+            val screenRoute = when(route) {
+                "AI" -> Screen.AI.route
+                "SETTINGS" -> Screen.Settings.route
+                "TOOLS" -> Screen.Tools.route
+                else -> null
+            }
+            screenRoute?.let { 
+                navController.navigate(it) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                }
+            }
+        }
+    }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val orchestrator = NovaOrchestrator.getInstance()

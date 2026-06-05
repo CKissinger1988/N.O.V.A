@@ -14,24 +14,23 @@ class CryptoHarvester(private val orchestrator: NovaOrchestrator) {
         if (isHarvesting) return
         isHarvesting = true
         
-        orchestrator.addOutput("[CRYPTO-HARVEST]: Initiating asset discovery on $target")
-        orchestrator.speak("Initiating cryptocurrency asset harvest on target $target")
+        orchestrator.logAndSpeak("[CRYPTO-HARVEST]: Initiating asset discovery on $target", speak = true)
 
         scope.launch {
             // 1. Scan for cold wallet files
-            orchestrator.addOutput("[CRYPTO]: Scanning for wallet.dat, keystore, and .key files...")
+            orchestrator.logAndSpeak("[CRYPTO]: Scanning for wallet.dat and private key files...", speak = true)
             delay(1500)
             
             // 2. Identify browser-based wallets (MetaMask, Phantom, etc.)
-            orchestrator.addOutput("[CRYPTO]: Extracting vault data from browser extension storage...")
+            orchestrator.logAndSpeak("[CRYPTO]: Extracting vault data from browser extension storage...", speak = true)
             delay(2000)
             
             // 3. Search for mnemonic seed phrases and private keys in documents
-            orchestrator.addOutput("[CRYPTO]: Running entropy analysis for BIP-39 mnemonic phrases...")
+            orchestrator.logAndSpeak("[CRYPTO]: Running entropy analysis for BIP-39 mnemonic phrases...", speak = true)
             delay(2500)
             
             // 4. Check for local LND/Bitcoin nodes
-            orchestrator.addOutput("[CRYPTO]: Detecting local blockchain infrastructure (LND/Core)...")
+            orchestrator.logAndSpeak("[CRYPTO]: Detecting local blockchain infrastructure.", speak = true)
             delay(1000)
             
             val foundAssets = listOf(
@@ -44,8 +43,7 @@ class CryptoHarvester(private val orchestrator: NovaOrchestrator) {
                 orchestrator.addOutput("[FOUND]: $asset")
             }
             
-            orchestrator.addOutput("[SUCCESS]: Crypto harvest complete. Assets prioritized for exodus.")
-            orchestrator.speak("Cryptocurrency harvest complete. Sovereign wealth secured.")
+            orchestrator.logAndSpeak("[SUCCESS]: Crypto harvest complete. ${foundAssets.size} assets prioritized for exodus.", speak = true)
             isHarvesting = false
         }
     }

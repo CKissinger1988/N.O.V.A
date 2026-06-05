@@ -35,6 +35,9 @@ class NovaOrchestrator private constructor() {
 
     fun updateTacticalAdvisory(advisory: String) {
         _tacticalAdvisory.value = advisory
+        appContext?.let { context ->
+            NovaWidgetProvider.refreshAllWidgets(context)
+        }
     }
 
     fun getLearningProgress() = aiEngine?.learningProgress ?: MutableStateFlow(0f)
@@ -271,7 +274,20 @@ class NovaOrchestrator private constructor() {
         }
     }
 
+    /**
+     * Unified Telemetry: Updates terminal and optionally announces status via AI voice.
+     */
+    fun logAndSpeak(line: String, speak: Boolean = false) {
+        addOutput(line)
+        if (speak) {
+            // Strip tags like [SYSTEM] or [SCAN] for cleaner speech
+            val cleanText = line.replace(Regex("\\[.*?\\]:?\\s*"), "").trim()
+            speak(cleanText)
+        }
+    }
+
     fun clearOutput() {
+
         _terminalOutput.value = emptyList()
         addOutput("[SYSTEM]: Terminal history purged.")
     }

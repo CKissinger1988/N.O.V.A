@@ -34,9 +34,10 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun setupContent() {
+        val targetScreen = intent.getStringExtra("TARGET_SCREEN")
         setContent {
             NOVATheme {
-                NovaApp()
+                NovaApp(startScreen = targetScreen)
             }
         }
     }

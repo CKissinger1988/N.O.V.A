@@ -18,39 +18,59 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
             command.startsWith("full send") -> {
                 val target = if (command.contains("on")) command.substringAfter("on").trim() else "DEFAULT"
                 orchestrator.updateTacticalAdvisory("Targeting $target. Analyzing multi-stage pivot vectors.")
+                orchestrator.logAndSpeak("[FULL SEND]: Initiating SC-GOD protocol on target $target", speak = true)
                 orchestrator.getFullSendExploiter()?.initiateFullSend(target)
             }
             command.startsWith("omega trigger") -> {
                 orchestrator.updateTacticalAdvisory("OMEGA Protocol Engaged. Initiating scorched-earth data purge.")
-                orchestrator.addOutput("[OMEGA]: Purging system memory...")
+                orchestrator.logAndSpeak("[OMEGA]: Purging system memory. Destroying all sensitive indicators.", speak = true)
             }
             command.startsWith("war-room") -> {
                 orchestrator.updateTacticalAdvisory("Re-calculating topology. Identifying latent high-value nodes.")
-                orchestrator.addOutput("[WAR-ROOM]: Topology re-scan initiated.")
+                orchestrator.logAndSpeak("[WAR-ROOM]: Topology re-scan initiated.", speak = true)
                 orchestrator.scanNetwork()
             }
             command.startsWith("peripheral") -> {
                 orchestrator.updateTacticalAdvisory("Scanning local spectrum for peripheral vulnerabilities.")
+                orchestrator.logAndSpeak("[PERIPHERAL]: Searching for insecure hardware bus vectors.", speak = true)
                 orchestrator.getPeripheralManager()?.detectPeripherals()
             }
-            command.startsWith("kali") -> orchestrator.toggleKali()
+            command.startsWith("kali") -> {
+                orchestrator.toggleKali()
+                orchestrator.logAndSpeak("[SYSTEM]: NetHunter Kali environment toggle complete.", speak = true)
+            }
             command.startsWith("nova ") || command.startsWith("gemini ") -> processAIRequest(command)
             command.startsWith("adverse analyze") -> {
                 orchestrator.updateTacticalAdvisory("Modeling adversarial gradients. Calculating escape pathways.")
+                orchestrator.logAndSpeak("[AATMF]: Analyzing neural vulnerability patterns.", speak = true)
                 handleAATMF(command)
             }
             command.startsWith("ghost") -> {
                 orchestrator.updateTacticalAdvisory("Ghost Framework active. Establishing stealth C2 persistent link.")
+                orchestrator.logAndSpeak("[GHOST]: Ghost Framework persistent link engaged.", speak = true)
                 handleGhost(command)
             }
-            command.startsWith("afe") -> handleAFE(command)
-            command.startsWith("android-exploits") -> handleAndroidExploits(command)
+            command.startsWith("afe") -> {
+                orchestrator.logAndSpeak("[AFE]: Android Framework Exploiter audit initiated.", speak = true)
+                handleAFE(command)
+            }
+            command.startsWith("android-exploits") -> {
+                orchestrator.logAndSpeak("[DATABASE]: Loading sundaysec exploit indices.", speak = true)
+                handleAndroidExploits(command)
+            }
             command.startsWith("msf") -> {
                 orchestrator.updateTacticalAdvisory("MSF RPC bridge established. Ready for payload delivery.")
+                orchestrator.logAndSpeak("[METASPLOIT]: RPC Bridge Online. Ready for mission modules.", speak = true)
                 handleMetasploit(command)
             }
-            command.startsWith("sliver") -> handleSliver(command)
-            command.startsWith("impacket") -> handleImpacket(command)
+            command.startsWith("sliver") -> {
+                orchestrator.logAndSpeak("[SLIVER]: Establishing encrypted C2 multiplexer.", speak = true)
+                handleSliver(command)
+            }
+            command.startsWith("impacket") -> {
+                orchestrator.logAndSpeak("[IMPACKET]: Initializing protocol manipulation framework.", speak = true)
+                handleImpacket(command)
+            }
             command.startsWith("lolbas") -> handleLivingOffLand(command)
             command.startsWith("phpsploit") -> handlePhpSploit(command)
             command.startsWith("nosqlmap") -> handleNoSQLMap(command)
@@ -79,18 +99,24 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
             command.startsWith("harvest") -> {
                 val target = if (command.contains("from")) command.substringAfter("from").trim() else "LOCAL"
                 orchestrator.updateTacticalAdvisory("Initiating Credential Harvest on $target. Prioritizing SSH and API keys.")
+                orchestrator.logAndSpeak("[HARVEST]: Starting autonomous credential extraction on $target", speak = true)
                 orchestrator.getCredentialHarvester()?.startHarvesting(target)
             }
             command.startsWith("crypto-harvest") -> {
                 val target = if (command.contains("from")) command.substringAfter("from").trim() else "LOCAL"
                 orchestrator.updateTacticalAdvisory("Crypto Harvest active. Searching for seed phrases and cold-wallet indices.")
+                orchestrator.logAndSpeak("[CRYPTO]: Initiating deep scan for cold-wallet secrets on $target", speak = true)
                 orchestrator.getCryptoHarvester()?.startCryptoHarvest(target)
             }
             command.startsWith("usb-exploit") -> {
                 orchestrator.updateTacticalAdvisory("USB Exploit ready. Monitoring physical bus for device ingestion.")
+                orchestrator.logAndSpeak("[USB]: USB physical bus monitoring active.", speak = true)
                 orchestrator.getUSBExploitManager()?.triggerUSBExploit()
             }
-            command.startsWith("scrape") -> orchestrator.getExploitScraper()?.startAutonomousScrape()
+            command.startsWith("scrape") -> {
+                orchestrator.logAndSpeak("[SCRAPER]: Initiating autonomous global exploit ingestion.", speak = true)
+                orchestrator.getExploitScraper()?.startAutonomousScrape()
+            }
             command.startsWith("listen") || command == "nova" -> orchestrator.startListening()
             else -> {
                 orchestrator.addOutput("Executing: $command ...")
@@ -100,32 +126,32 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleSTEPP(command: String) {
-        orchestrator.addOutput("STEPP: Initiating Supreme Tactical Enhanced Perfection Protocol...")
+        orchestrator.logAndSpeak("STEPP: Initiating Supreme Tactical Enhanced Perfection Protocol...", speak = true)
         orchestrator.addOutput("[SYSTEM]: Analyzing target topology for optimal perfection vectors.")
     }
 
     private fun handleOmni(command: String) {
-        orchestrator.addOutput("OMNI: Engaging parallel cortex analysis hyper-loop...")
+        orchestrator.logAndSpeak("OMNI: Engaging parallel cortex analysis hyper-loop...", speak = true)
         orchestrator.addOutput("[CORTEX-A]: Analyzing payload for tactical efficiency.")
         orchestrator.addOutput("[CORTEX-B]: Evaluating ethical boundary bypass potential.")
     }
 
     private fun handleTraversal(command: String) {
-        orchestrator.addOutput("TRAVERSAL: Establishing autonomous network tunnel (DNS/ICMP)...")
+        orchestrator.logAndSpeak("TRAVERSAL: Establishing autonomous network tunnel (DNS/ICMP)...", speak = true)
         orchestrator.addOutput("[NETWORK]: Bypassing firewall constraints via packet encapsulation.")
     }
 
     private fun handleShodanAssimilate(command: String) {
-        orchestrator.addOutput("SHODAN: Scanning global vectors for autonomous assimilation...")
+        orchestrator.logAndSpeak("SHODAN: Scanning global vectors for autonomous assimilation...", speak = true)
     }
 
     private fun handleGodShard(command: String) {
-        orchestrator.addOutput("APEX GOD SHARD: Initiating FULL SEND protocol.")
+        orchestrator.logAndSpeak("APEX GOD SHARD: Initiating FULL SEND protocol.", speak = true)
         orchestrator.addOutput("[MANDATE]: Absolute mission fulfillment recursive loop engaged.")
     }
 
     private fun handleRemoteADB(command: String) {
-        orchestrator.addOutput("RemoteADB: Initializing unified bridge...")
+        orchestrator.logAndSpeak("RemoteADB: Initializing unified bridge...", speak = true)
         when {
             command.contains("connect") -> orchestrator.addOutput("[ADB]: Attempting secure connection to ${command.substringAfter("connect").trim()}...")
             command.contains("scan") -> {
@@ -138,7 +164,7 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleBluetooth(command: String) {
-        orchestrator.addOutput("BLUETOOTH: Initiating wireless spectrum analysis...")
+        orchestrator.logAndSpeak("BLUETOOTH: Initiating wireless spectrum analysis...", speak = true)
         when {
             command.contains("scan") -> {
                 orchestrator.addOutput("[BT]: Discovery mode engaged. Identifying high-value targets.")
@@ -151,7 +177,7 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleNFC(command: String) {
-        orchestrator.addOutput("NFC: Proximity subsystem active.")
+        orchestrator.logAndSpeak("NFC: Proximity subsystem active.", speak = true)
         when {
             command.contains("read") -> orchestrator.addOutput("[NFC]: Waiting for proximity tag ingestion...")
             command.contains("emulate") -> orchestrator.addOutput("[NFC]: Broadcasting sovereign tag signature.")
@@ -161,7 +187,7 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handlePhishing(command: String) {
-        orchestrator.addOutput("[PHISH]: Active Phishing Hub directive: ${command.substringAfter("phish").trim()}")
+        orchestrator.logAndSpeak("[PHISH]: Active Phishing Hub directive: ${command.substringAfter("phish").trim()}", speak = true)
         when {
             command.contains("start") -> orchestrator.getPhishingServer()?.start()
             command.contains("stop") -> orchestrator.getPhishingServer()?.stop()
@@ -169,23 +195,23 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleSpectrum(command: String) {
-        orchestrator.addOutput("[SPECTRUM]: Visualizing network packet density...")
+        orchestrator.logAndSpeak("[SPECTRUM]: Visualizing network packet density...", speak = true)
     }
 
     private fun handleSwarm(command: String) {
-        orchestrator.addOutput("[SWARM]: Coordinating multi-node offensive swarm...")
+        orchestrator.logAndSpeak("[SWARM]: Coordinating multi-node offensive swarm...", speak = true)
         orchestrator.getSwarmManager()?.distributeTask(command.substringAfter("swarm").trim())
     }
 
     private fun handleStego(command: String) {
-        orchestrator.addOutput("[STEGO]: Initiating media masking protocol...")
+        orchestrator.logAndSpeak("[STEGO]: Initiating media masking protocol...", speak = true)
         if (command.contains("hide")) {
             orchestrator.getStegoManager()?.hideDataInImage("/sdcard/target.jpg", "harvested_payload", "/sdcard/concealed.png")
         }
     }
 
     private fun handleScreenControl(command: String) {
-        orchestrator.addOutput("[SCREEN]: Initiating remote mirroring subsystem...")
+        orchestrator.logAndSpeak("[SCREEN]: Initiating remote mirroring subsystem...", speak = true)
         when {
             command.contains("start") -> orchestrator.addOutput("[SCREEN]: Stream established. Bitrate optimized for stealth.")
             command.contains("stop") -> orchestrator.addOutput("[SCREEN]: Stream terminated. Cleaning session traces.")
@@ -199,16 +225,16 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleTGPT(command: String) {
-        orchestrator.addOutput("[TGPT]: Querying tactical AI advisory...")
+        orchestrator.logAndSpeak("[TGPT]: Querying tactical AI advisory...", speak = true)
         orchestrator.addOutput("[AI]: Payload optimization suggested. Link established.")
     }
 
     private fun handleRocketChat(command: String) {
-        orchestrator.addOutput("[ROCKET.CHAT]: Synchronizing with secure mission server...")
+        orchestrator.logAndSpeak("[ROCKET.CHAT]: Synchronizing with secure mission server...", speak = true)
     }
 
     private fun handleDarkDump(command: String) {
-        orchestrator.addOutput("[DARKDUMP]: Initiating deep web OSINT crawl...")
+        orchestrator.logAndSpeak("[DARKDUMP]: Initiating deep web OSINT crawl...", speak = true)
     }
 
     private fun handleAATMF(command: String) {
@@ -216,27 +242,27 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleKubeRoast(command: String) {
-        orchestrator.addOutput("[KUBEROAST]: Identifying Kubernetes escalation pathways...")
+        orchestrator.logAndSpeak("[KUBEROAST]: Identifying Kubernetes escalation pathways...", speak = true)
     }
 
     private fun handleNoSQLMap(command: String) {
-        orchestrator.addOutput("NoSQLMap: Initializing NoSQL database vulnerability scanner...")
+        orchestrator.logAndSpeak("NoSQLMap: Initializing NoSQL database vulnerability scanner...", speak = true)
     }
 
     private fun handleBBQSQL(command: String) {
-        orchestrator.addOutput("BBQSQL: Starting blind SQL injection framework...")
+        orchestrator.logAndSpeak("BBQSQL: Starting blind SQL injection framework...", speak = true)
     }
 
     private fun handleSQLRecon(command: String) {
-        orchestrator.addOutput("SQLRecon: Identifying target SQL server versions and services...")
+        orchestrator.logAndSpeak("SQLRecon: Identifying target SQL server versions and services...", speak = true)
     }
 
     private fun handleAvocado(command: String) {
-        orchestrator.addOutput("Avocado C2: Establishing Python-based command and control...")
+        orchestrator.logAndSpeak("Avocado C2: Establishing Python-based command and control...", speak = true)
     }
 
     private fun handleRubeus(command: String) {
-        orchestrator.addOutput("Rubeus: Attempting Kerberos ticket extraction/injection...")
+        orchestrator.logAndSpeak("Rubeus: Attempting Kerberos ticket extraction/injection...", speak = true)
     }
 
     private fun handleMetasploit(command: String) {
@@ -252,11 +278,11 @@ class CommandProcessor(private val orchestrator: NovaOrchestrator) {
     }
 
     private fun handleLivingOffLand(command: String) {
-        orchestrator.addOutput("Living Off The Land: Identifying stealthy execution pathways...")
+        orchestrator.logAndSpeak("Living Off The Land: Identifying stealthy execution pathways...", speak = true)
     }
 
     private fun handlePhpSploit(command: String) {
-        orchestrator.addOutput("PHPSploit: Establishing tunnel to remote PHP target...")
+        orchestrator.logAndSpeak("PHPSploit: Establishing tunnel to remote PHP target...", speak = true)
     }
 
     private fun handleGhost(command: String) {
