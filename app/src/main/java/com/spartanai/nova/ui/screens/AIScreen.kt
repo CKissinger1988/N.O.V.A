@@ -20,7 +20,10 @@ fun AIScreen() {
     val terminalOutput by orchestrator.terminalOutput.collectAsState()
     
     // Filter output for AI related logs
-    val aiLogs = terminalOutput.filter { it.contains("AI Agent") || it.contains("Gemini") || it.contains("Claude") }
+    val aiLogs = terminalOutput.filter { line ->
+        val lower = line.lowercase()
+        lower.contains("ai agent") || lower.contains("gemini") || lower.contains("claude") || lower.contains("antigravity") || lower.contains("[ai") || lower.contains("tgpt")
+    }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("AI Offensive Command Center", style = MaterialTheme.typography.headlineMedium)

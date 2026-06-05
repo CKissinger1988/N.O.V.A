@@ -12,11 +12,78 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.spartanai.nova.core.NovaOrchestrator
 
+import androidx.navigation.NavController
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.BorderStroke
+import com.spartanai.nova.ui.navigation.Screen
+
+private data class SubScreenItem(
+    val screen: Screen,
+    val title: String,
+    val description: String,
+    val color: Color
+)
+
 @Composable
-fun ToolsScreen() {
+fun ToolsScreen(navController: NavController) {
     val orchestrator = NovaOrchestrator.getInstance()
     
+    val subScreens = listOf(
+        SubScreenItem(Screen.AI, "AI Hub", "Autonomous AI agents and chat", Color(0xFF4CAF50)),
+        SubScreenItem(Screen.WarRoom, "War Room", "Real-time topology & target map", Color(0xFFFF5722)),
+        SubScreenItem(Screen.Kali, "Kali NetHunter", "Offensive pentesting & shell", Color(0xFFE53935)),
+        SubScreenItem(Screen.RemoteADB, "Remote ADB", "Android device controller", Color(0xFF00ACC1)),
+        SubScreenItem(Screen.Wireless, "Wireless Tools", "BLE, NFC & Wifi analysis", Color(0xFF8E24AA)),
+        SubScreenItem(Screen.RemoteScreen, "Remote Mirror", "Stealth mirroring & feed", Color(0xFFFB8C00)),
+        SubScreenItem(Screen.Comms, "Secure Comms", "Encrypted Rocket.Chat & TGPT", Color(0xFF00897B)),
+        SubScreenItem(Screen.Wallet, "Crypto Wallet", "Autonomous transaction hub", Color(0xFFFDD835)),
+        SubScreenItem(Screen.Knowledge, "Knowledge Base", "Exploit payload repository", Color(0xFF757575)),
+        SubScreenItem(Screen.Spectrum, "Spectrum", "SDR frequency visualization", Color(0xFF3949AB)),
+        SubScreenItem(Screen.Phishing, "Phish Portal", "Token harvester and landing", Color(0xFFD81B60))
+    )
+    
     Column(modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState())) {
+        Text("Offensive Hub Dashboard", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
+        Text("Navigate to sub-systems and deploy exploit modules.", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Sub-Navigation Grid
+        Text("Sub-Systems", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        subScreens.chunked(2).forEach { rowItems ->
+            Row(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+                rowItems.forEachIndexed { index, item ->
+                    Card(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = if (index == 0) 4.dp else 0.dp, start = if (index == 1) 4.dp else 0.dp)
+                            .clickable { navController.navigate(item.screen.route) },
+                        border = BorderStroke(1.dp, item.color.copy(alpha = 0.5f)),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(item.screen.icon, contentDescription = null, tint = item.color, modifier = Modifier.size(24.dp))
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(item.title, style = MaterialTheme.typography.titleSmall, maxLines = 1)
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(item.description, style = MaterialTheme.typography.bodySmall, color = Color.Gray, maxLines = 2)
+                        }
+                    }
+                }
+                if (rowItems.size < 2) {
+                    Spacer(modifier = Modifier.weight(1f).padding(start = 4.dp))
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
         Text("Offensive Toolkit", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
         

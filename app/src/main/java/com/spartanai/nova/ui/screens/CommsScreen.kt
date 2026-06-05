@@ -8,6 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.spartanai.nova.core.NovaOrchestrator
 
@@ -67,6 +73,18 @@ fun RocketChatSection(orchestrator: NovaOrchestrator) {
 @Composable
 fun TGPTSection(orchestrator: NovaOrchestrator) {
     var prompt by remember { mutableStateOf("") }
+    val terminalOutput by orchestrator.terminalOutput.collectAsState()
+    
+    val tgptLogs = terminalOutput.filter { line ->
+        line.contains("[TGPT]") || line.contains("[AI]") || line.contains("[AI-ADVISORY]")
+    }
+    val listState = rememberLazyListState()
+    
+    LaunchedEffect(tgptLogs.size) {
+        if (tgptLogs.isNotEmpty()) {
+            listState.animateScrollToItem(tgptLogs.size - 1)
+        }
+    }
     
     Column {
         Text("Tactical Terminal GPT", style = MaterialTheme.typography.titleLarge)
@@ -76,7 +94,20 @@ fun TGPTSection(orchestrator: NovaOrchestrator) {
         
         Card(modifier = Modifier.fillMaxWidth().weight(1f)) {
             Box(modifier = Modifier.fillMaxSize().padding(8.dp)) {
-                Text("AI: Waiting for input...", color = Color.Gray)
+                if (tgptLogs.isEmpty()) {
+                    Text("AI: Waiting for input...", color = Color.Gray)
+                } else {
+                    LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
+                        items(tgptLogs) { log ->
+                            Text(
+                                text = log,
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+                        }
+                    }
+                }
             }
         }
         
@@ -87,6 +118,16 @@ fun TGPTSection(orchestrator: NovaOrchestrator) {
             onValueChange = { prompt = it },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Ask TGPT...") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(
+                onSend = {
+                    if (prompt.isNotBlank()) {
+                        orchestrator.executeCommand("tgpt $prompt")
+                        prompt = ""
+                    }
+                }
+            ),
             trailingIcon = {
                 IconButton(onClick = { 
                     if (prompt.isNotBlank()) {

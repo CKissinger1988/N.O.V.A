@@ -99,6 +99,32 @@ class SecurityManager {
     }
 
     /**
+     * Deactivates the disguise mode and restores normal operation.
+     */
+    fun deactivateOmegaProtocol(context: android.content.Context) {
+        val prefs = context.getSharedPreferences("nova_prefs", android.content.Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("disguise_mode_active", false).apply()
+
+        val pm = context.packageManager
+
+        // Enable Main Activity
+        pm.setComponentEnabledSetting(
+            android.content.ComponentName(context, "com.spartanai.nova.MainActivity"),
+            android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            android.content.pm.PackageManager.DONT_KILL_APP
+        )
+
+        // Disable Baking Alias
+        pm.setComponentEnabledSetting(
+            android.content.ComponentName(context, "com.spartanai.nova.BakingActivityAlias"),
+            android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            android.content.pm.PackageManager.DONT_KILL_APP
+        )
+        
+        NovaOrchestrator.getInstance().addOutput("[SYSTEM]: DEACTIVATE OMEGA PROTOCOL. RESTORING STANDARD OPERATION...")
+    }
+
+    /**
      * Generates a high-entropy key exceeding standard requirements.
      * Integrates hardware-backed randomness if available.
      */

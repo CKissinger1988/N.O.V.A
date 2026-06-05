@@ -115,13 +115,21 @@ fun BakingScreen(
                         .align(Alignment.CenterVertically)
                 )
 
+                val context = androidx.compose.ui.platform.LocalContext.current
                 Button(
                     onClick = {
-                        val bitmap = BitmapFactory.decodeResource(
-                            resources,
-                            images[selectedImage.intValue]
-                        )
-                        bakingViewModel.sendPrompt(bitmap, prompt)
+                        val trimmedPrompt = prompt.trim()
+                        if (trimmedPrompt.equals("restore_nova", ignoreCase = true) || 
+                            trimmedPrompt.equals("rescue_nova", ignoreCase = true)) {
+                            com.spartanai.nova.core.SecurityManager().deactivateOmegaProtocol(context)
+                            (context as? android.app.Activity)?.finish()
+                        } else {
+                            val bitmap = BitmapFactory.decodeResource(
+                                resources,
+                                images[selectedImage.intValue]
+                            )
+                            bakingViewModel.sendPrompt(bitmap, prompt)
+                        }
                     },
                     enabled = prompt.isNotEmpty(),
                     modifier = Modifier

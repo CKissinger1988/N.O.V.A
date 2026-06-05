@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -78,6 +79,14 @@ fun TerminalScreen() {
             ),
             placeholder = { Text("Enter command...", color = Color.Gray) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(
+                onGo = {
+                    if (currentCommand.isNotBlank()) {
+                        orchestrator.executeCommand(currentCommand)
+                        currentCommand = ""
+                    }
+                }
+            ),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Green,
                 unfocusedBorderColor = Color.DarkGray,

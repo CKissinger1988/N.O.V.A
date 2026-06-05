@@ -92,7 +92,7 @@ fun NovaApp() {
             composable(Screen.RemoteScreen.route) { RemoteScreen() }
             composable(Screen.Comms.route) { CommsScreen() }
             composable(Screen.Wallet.route) { WalletScreen() }
-            composable(Screen.Tools.route) { ToolsScreen() }
+            composable(Screen.Tools.route) { ToolsScreen(navController) }
             composable(Screen.Knowledge.route) { KnowledgeScreen() }
             composable(Screen.Settings.route) { SettingsScreen() }
         }
