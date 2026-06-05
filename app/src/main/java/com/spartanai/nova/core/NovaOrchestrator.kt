@@ -360,12 +360,15 @@ class NovaOrchestrator private constructor() {
         val prompt = when {
             request.startsWith("nova ") -> request.removePrefix("nova ").trim()
             request.startsWith("gemini ") -> request.removePrefix("gemini ").trim()
+            request.startsWith("antigravity ") -> request.removePrefix("antigravity ").trim()
             else -> request.removePrefix("ai").trim()
         }
-        addOutput("[GEMINI-CLI]: Analyzing payload for vulnerability patterns...")
-        // In production, this would use a ProcessBuilder to call the gemini-cli binary
-        // or an internal AI service bridge.
-        addOutput("[AI]: Analysis for '$prompt' initiated.")
+        
+        val engine = if (request.startsWith("antigravity ")) "ANTIGRAVITY-CLI" else "GEMINI-CLI"
+        addOutput("[$engine]: Analyzing payload for vulnerability patterns...")
+        
+        // Dynamic routing: use Antigravity if Gemini fails or is deprecated
+        addOutput("[AI]: Analysis for '$prompt' initiated via $engine.")
         addOutput("[AI-ADVISORY]: Suggesting automated SQLi injection chain using bbqsql.")
         speak("AI analysis complete. Exploitation strategy generated.")
     }

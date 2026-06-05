@@ -12,6 +12,7 @@ This document lists all recognized vocal and text-based directives for the N.O.V
 | `NOVA` | Voice | Activates the Speech-to-Text listener for immediate directives. |
 | `NOVA <prompt>` | Both | Gemini/Claude strategic advisory. |
 | `Gemini <prompt>` | Both | Direct Gemini-CLI strategic reasoning. |
+| `Antigravity <prompt>` | Both | Direct Antigravity-CLI strategic reasoning. |
 | `listen` | Text/Voice | Alias for NOVA activation. |
 | `full send on <target>` | Both | Initiates recursive SC-GOD protocol until target breach & reverse shell. |
 | `god --directive <d>` | Both | Engages absolute mission fulfillment loop (Apex God Shard). |
@@ -28,6 +29,7 @@ This document lists all recognized vocal and text-based directives for the N.O.V
 | :--- | :--- | :--- |
 | `NOVA <prompt>` | AI Hub | Gemini/Claude strategic advisory. |
 | `Gemini <prompt>` | Gemini Hub | Direct Gemini-CLI strategic reasoning. |
+| `Antigravity <prompt>` | Antigravity Hub | Direct Antigravity-CLI strategic reasoning. |
 | `tgpt <query>` | Tactical GPT | Terminal-based AI chat for immediate situational advice. |
 | `adverse analyze <m>` | Adversarial AI | Model adversarial AI attack vectors against target models. |
 

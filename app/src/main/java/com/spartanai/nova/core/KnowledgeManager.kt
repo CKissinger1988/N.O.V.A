@@ -94,6 +94,26 @@ class KnowledgeManager {
             "AI-GEMINI", "Gemini Direct Hub", "Direct Gemini-CLI strategic reasoning.",
             "gemini <prompt>", "AI Hub", riskLevel = RiskLevel.LOW
         ))
+        list.add(ExploitCommand(
+            "AI-AG", "Antigravity Hub", "Fail-safe Antigravity-CLI reasoning engine.",
+            "antigravity <prompt>", "AI Hub", riskLevel = RiskLevel.LOW
+        ))
+
+        // ProjectDiscovery Nuclei integration
+        list.add(ExploitCommand(
+            "NUC-001", "Nuclei Fast Scan", "Template-based vulnerability scanner.",
+            "nuclei -u <target>", "Vulnerability", riskLevel = RiskLevel.MEDIUM
+        ))
+
+        // Wireless Dominance
+        list.add(ExploitCommand(
+            "WIF-001", "Wifite2", "Automated wireless auditing tool.",
+            "wifite", "Wireless", riskLevel = RiskLevel.HIGH
+        ))
+        list.add(ExploitCommand(
+            "WIF-002", "Bettercap", "Swiss army knife for network attacks.",
+            "bettercap", "Wireless", riskLevel = RiskLevel.HIGH
+        ))
 
         // Xposure & darkdump
         list.add(ExploitCommand(
