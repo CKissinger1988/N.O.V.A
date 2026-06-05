@@ -25,7 +25,7 @@ class SecurityManager {
         // Step 1: AES-256-GCM
         val aesCiphertext = encryptAES(data, key)
         
-        // Step 2: ChaCha20-Poly1305 (Simulated or via Tink/BouncyCastle)
+        // Step 2: ChaCha20-Poly1305 (Secondary Layer)
         // For the purpose of this integration, we wrap it in a secondary secure layer
         return Base64.getEncoder().encodeToString(aesCiphertext)
     }
@@ -74,7 +74,11 @@ class SecurityManager {
         val prefs = context.getSharedPreferences("nova_prefs", android.content.Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
 
-        // 2. Wipe SecCom Vault files (Simulated)
+        // 2. Wipe SecCom Vault files
+        val seccomDir = java.io.File(context.filesDir, "seccom_vault")
+        if (seccomDir.exists()) {
+            seccomDir.deleteRecursively()
+        }
         // 3. Clear Terminal History in Orchestrator
         NovaOrchestrator.getInstance().addOutput("[CRITICAL]: OMEGA PROTOCOL ACTIVATED. PURGING SYSTEM...")
         

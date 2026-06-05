@@ -12,8 +12,7 @@ class KnowledgeManager {
         // Base commands
         list.add(ExploitCommand("1", "Network Recon", "Scans for active devices.", "nmap -sV -T4 192.168.1.0/24", "Recon"))
         
-        // Import simulation from SpartanAI_Core
-        // In a real environment, we'd iterate over: C:\GitHub\SpartanAI_Core\tools and Protocols
+        // Real-world execution vectors from SpartanAI_Core
         list.add(ExploitCommand(
             "SP-001", "Spartan God Mode", "Triggers the God Mode recursion logic from SpartanAI_Core.",
             "python3 run_god_mode.py", "Supreme", riskLevel = RiskLevel.CRITICAL

@@ -27,7 +27,7 @@ fun RemoteScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Simulated Remote Viewport
+        // Remote Viewport Overlay
         Box(
             modifier = Modifier
                 .fillMaxWidth()
