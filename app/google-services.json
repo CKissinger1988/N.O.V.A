@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "572266038116",
+    "project_id": "com-spartanai-nova-d1a96",
+    "storage_bucket": "com-spartanai-nova-d1a96.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572266038116:android:bd688eb3d7d00276d03071",
+        "android_client_info": {
+          "package_name": "com.spartanai.nova"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEk6D4Wfts8ofteB0fjN-t2ZGZn5aOMyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
